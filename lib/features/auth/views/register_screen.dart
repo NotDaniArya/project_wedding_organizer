@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
 import 'package:project_v/shared_widgets/button.dart';
@@ -25,15 +26,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String _enteredCity = '';
   bool _agreedToTerms = false;
 
-  void _showSnackBar(String message, {bool isError = true}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isError ? Colors.red : Colors.green,
-      ),
-    );
-  }
-
   void _submitSignUp() {
     final isValid = _form.currentState!.validate();
 
@@ -53,13 +45,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           address: _enteredAddress.trim(),
           city: _enteredCity.trim(),
           onSuccess: () {
-            _showSnackBar(
-              'Registrasi berhasil! Silakan cek email Anda untuk verifikasi.',
-              isError: false,
+            MyHelperFunction.toastNotification(
+              'Berhasil mendaftar. Silahkan login!',
+              true,
+              context,
             );
-            Navigator.of(context).pop();
           },
-          onError: (error) => _showSnackBar(error),
+          onError: (error) =>
+              MyHelperFunction.toastNotification(error, false, context),
         );
   }
 
