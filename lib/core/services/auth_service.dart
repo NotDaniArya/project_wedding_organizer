@@ -40,4 +40,27 @@ class AuthService {
       throw Exception('Terjadi kesalahan tidak terduga: $e');
     }
   }
+
+  // fungsi untuk user login
+  Future<void> signIn({required String email, required String password}) async {
+    try {
+      final res = await _auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+    } on AuthException catch (e) {
+      throw Exception('Gagal mendaftar: ${e.message}');
+    } catch (e) {
+      throw Exception('Terjadi kesalahan tidak terduga: $e');
+    }
+  }
+
+  // fungsi untuk logout
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw Exception('Gagal keluar: $e');
+    }
+  }
 }

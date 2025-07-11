@@ -38,6 +38,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   google_fonts: ^6.2.1
   flutter_native_splash: ^2.4.6
+  toastification: ^3.0.3
 
 dev_dependencies:
   flutter_test:

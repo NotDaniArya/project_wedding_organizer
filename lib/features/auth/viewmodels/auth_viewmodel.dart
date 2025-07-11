@@ -6,9 +6,9 @@ import '../../../core/services/auth_service.dart';
 // Provider untuk AuthService
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 
-// State Notifier untuk mengelola state otentikasi (misal: loading)
+// State Notifier untuk mengelola state otentikasi untuk loading
 class AuthViewModel extends StateNotifier<bool> {
-  AuthViewModel(this._ref) : super(false); // State awal: tidak loading
+  AuthViewModel(this._ref) : super(false); // State awal tidak loading
 
   final Ref _ref;
 
@@ -38,7 +38,34 @@ class AuthViewModel extends StateNotifier<bool> {
       onSuccess();
     } catch (e) {
       onError(e.toString());
+    } finally {
+      state = false; // Set loading menjadi false
     }
+  }
+
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required VoidCallback onSucces,
+    required Function(String) onError,
+  }) async {
+    state = true; // set loading menjadi true
+    try {
+      await _ref
+          .read(authServiceProvider)
+          .signIn(email: email, password: password);
+      onSucces();
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      state = false; // Set loading menjadi false
+    }
+  }
+
+  // function untuk logout
+  Future<void> signOut() async {
+    state = true; // set loading menjadi true
+    await _ref.read(authServiceProvider).signOut();
     state = false; // Set loading menjadi false
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
+import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/register_screen.dart';
 import 'package:project_v/shared_widgets/button.dart';
 import 'package:project_v/shared_widgets/input_text_field.dart';
@@ -6,16 +9,47 @@ import 'package:project_v/shared_widgets/text_button.dart';
 
 import '../../../app/utils/constants/sizes.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final _form = GlobalKey<FormState>();
-    String _enteredEmail = '';
-    String _enteredPass = '';
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
 
-    void dummy() {}
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _form = GlobalKey<FormState>();
+  String _enteredEmail = '';
+  String _enteredPass = '';
+
+  void _submitSignIn() {
+    final isValid = _form.currentState!.validate();
+
+    if (!isValid) {
+      return;
+    }
+
+    _form.currentState!.save();
+
+    ref
+        .read(authViewModelProvider.notifier)
+        .signIn(
+          email: _enteredEmail.trim(),
+          password: _enteredPass.trim(),
+          onSucces: () {
+            MyHelperFunction.toastNotification(
+              'Berhasil login!. Selamat datang kembali.',
+              true,
+              context,
+            );
+          },
+          onError: (error) =>
+              MyHelperFunction.toastNotification(error, false, context),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = ref.watch(authViewModelProvider);
 
     return Scaffold(
       body: Center(
@@ -61,7 +95,9 @@ class LoginScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
-                    MyButton(text: 'Login', onPressed: dummy),
+                    isLoading
+                        ? const CircularProgressIndicator()
+                        : MyButton(text: 'Login', onPressed: _submitSignIn),
                   ],
                 ),
               ),

@@ -54,6 +54,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           onError: (error) =>
               MyHelperFunction.toastNotification(error, false, context),
         );
+
+    // Navigator.push(context, route)
   }
 
   @override
