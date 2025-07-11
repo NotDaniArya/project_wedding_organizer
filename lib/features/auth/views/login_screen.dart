@@ -8,6 +8,7 @@ import 'package:project_v/shared_widgets/input_text_field.dart';
 import 'package:project_v/shared_widgets/text_button.dart';
 
 import '../../../app/utils/constants/sizes.dart';
+import '../../beranda/views/beranda_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -40,6 +41,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               'Berhasil login!. Selamat datang kembali.',
               true,
               context,
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const BerandaScreen()),
             );
           },
           onError: (error) =>
