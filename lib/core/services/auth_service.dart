@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:project_v/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +15,7 @@ class AuthService {
     required String phoneNumber,
     required String address,
     required String city,
+    File? avatarFile,
   }) async {
     try {
       // 1. Buat user baru di Supabase Auth
@@ -23,6 +26,31 @@ class AuthService {
         // 2. Lakukan login untuk mengaktifkan sesi sepenuhnya
         await _auth.signInWithPassword(email: email, password: password);
 
+        String? avatarUrl;
+        // Jika ada file avatar yang dipilih, upload ke storage
+        if (avatarFile != null) {
+          final userId = res.user!.id;
+          final fileExt = avatarFile.path.split('.').last;
+          final fileName = '$userId/user-profile.$fileExt';
+
+          // Upload file
+          await _client.storage
+              .from('user-profile')
+              .upload(
+                fileName,
+                avatarFile,
+                fileOptions: const FileOptions(
+                  cacheControl: '3600',
+                  upsert: true,
+                ),
+              );
+
+          // Dapatkan URL publik dari gambar yang diupload
+          avatarUrl = _client.storage
+              .from('user-profile')
+              .getPublicUrl(fileName);
+        }
+
         // Langkah 3: Sekarang, insert data profil.
         await _client.from('profiles').insert({
           'id': res.user!.id,
@@ -31,6 +59,7 @@ class AuthService {
           'no_hp': phoneNumber,
           'address': address,
           'city': city,
+          'avatar_url': avatarUrl,
         });
       }
     } on AuthException catch (e) {

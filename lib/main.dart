@@ -9,9 +9,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 final theme = ThemeData().copyWith(
   colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color.fromARGB(255, 69, 123, 232),
+    seedColor: const Color.fromARGB(255, 52, 106, 218),
+    brightness: Brightness.light,
   ),
-  brightness: Brightness.light,
   textTheme: GoogleFonts.robotoSlabTextTheme(),
 );
 

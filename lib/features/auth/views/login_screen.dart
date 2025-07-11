@@ -57,6 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isLoading = ref.watch(authViewModelProvider);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
           margin: const EdgeInsetsGeometry.symmetric(horizontal: 12),

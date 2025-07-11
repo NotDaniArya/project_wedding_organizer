@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
@@ -25,6 +28,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String _enteredAddress = '';
   String _enteredCity = '';
   bool _agreedToTerms = false;
+  File? _selectedImage;
+
+  // Fungsi untuk memilih gambar
+  Future<void> _pickImage(ImageSource source) async {
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(
+      source: source,
+      imageQuality: 50, // Kompres gambar agar tidak terlalu besar
+      maxWidth: 150,
+    );
+
+    if (pickedImage == null) {
+      return;
+    }
+
+    setState(() {
+      _selectedImage = File(pickedImage.path);
+    });
+  }
 
   void _submitSignUp() {
     final isValid = _form.currentState!.validate();
@@ -44,6 +66,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           phoneNumber: _enteredPhoneNumber.trim(),
           address: _enteredAddress.trim(),
           city: _enteredCity.trim(),
+          avatarFile: _selectedImage,
           onSuccess: () {
             MyHelperFunction.toastNotification(
               'Berhasil mendaftar. Silahkan login!',
@@ -54,8 +77,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           onError: (error) =>
               MyHelperFunction.toastNotification(error, false, context),
         );
-
-    // Navigator.push(context, route)
   }
 
   @override
@@ -63,6 +84,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final isLoading = ref.watch(authViewModelProvider);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -87,6 +109,71 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       'Pastikan data yang anda masukkan adalah data asli dan lengkap untuk memastikan tidak ada masalah pada saat melakuakan reservasi',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    Center(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey.shade200,
+                            backgroundImage: _selectedImage != null
+                                ? FileImage(_selectedImage!)
+                                : null,
+                            child: _selectedImage == null
+                                ? Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.grey.shade800,
+                                  )
+                                : null,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  // Tampilkan pilihan kamera atau galeri
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) => Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          leading: const Icon(Icons.camera_alt),
+                                          title: const Text('Kamera'),
+                                          onTap: () {
+                                            Navigator.of(ctx).pop();
+                                            _pickImage(ImageSource.camera);
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(
+                                            Icons.photo_library,
+                                          ),
+                                          title: const Text('Galeri'),
+                                          onTap: () {
+                                            Navigator.of(ctx).pop();
+                                            _pickImage(ImageSource.gallery);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
                     TInputTextField(
