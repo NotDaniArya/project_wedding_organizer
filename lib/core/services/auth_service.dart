@@ -30,7 +30,9 @@ class AuthService {
         // Jika ada file avatar yang dipilih, upload ke storage
         if (avatarFile != null) {
           final userId = res.user!.id;
-          final fileExt = avatarFile.path.split('.').last;
+          final fileExt = avatarFile.path
+              .split('.')
+              .last; // .split(.) memisahkan file menjadi list berdasarkan titik dan .last mengambil ekstensi file dari gambar yang dipilih
           final fileName = '$userId/user-profile.$fileExt';
 
           // Upload file
@@ -40,8 +42,10 @@ class AuthService {
                 fileName,
                 avatarFile,
                 fileOptions: const FileOptions(
-                  cacheControl: '3600',
-                  upsert: true,
+                  cacheControl:
+                      '3600', // menyimpan salinan gambar ke browser selama 3600 detik (1 jam)
+                  upsert:
+                      true, // menimpa gambar jika ada gambar yang sama namanya
                 ),
               );
 

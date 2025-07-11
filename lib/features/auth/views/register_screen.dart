@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
@@ -30,21 +31,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _agreedToTerms = false;
   File? _selectedImage;
 
-  // Fungsi untuk memilih gambar
+  // Fungsi untuk memilih dan memotong gambar
   Future<void> _pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
-    final pickedImage = await imagePicker.pickImage(
+    final pickedImageFile = await imagePicker.pickImage(
       source: source,
-      imageQuality: 50, // Kompres gambar agar tidak terlalu besar
-      maxWidth: 150,
+      imageQuality: 80,
     );
 
-    if (pickedImage == null) {
-      return;
-    }
+    if (pickedImageFile == null) return;
+
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedImageFile.path,
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Sesuaikan Profile',
+          toolbarColor: Theme.of(context).colorScheme.primary,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: true,
+        ), // Kunci rasio agar tetap persegi
+        IOSUiSettings(
+          title: 'Potong Gambar',
+          aspectRatioLockEnabled: true,
+          aspectRatioPickerButtonHidden: true,
+        ),
+      ],
+    );
+
+    if (croppedFile == null) return;
 
     setState(() {
-      _selectedImage = File(pickedImage.path);
+      _selectedImage = File(croppedFile.path);
     });
   }
 
