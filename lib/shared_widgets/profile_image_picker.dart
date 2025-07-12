@@ -21,7 +21,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(
       source: source,
-      imageQuality: 80,
+      imageQuality: 70,
     );
 
     if (pickedImage == null) return;

@@ -37,6 +37,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       return;
     }
 
+    // validator image picker
+    if (_selectedImage == null) {
+      MyHelperFunction.toastNotification(
+        'Harap pilih foto profil Anda.',
+        false,
+        context,
+      );
+      return;
+    }
+
     _form.currentState!.save();
 
     ref
@@ -146,6 +156,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TInputTextField(
                       labelText: 'Kota asal',
+                      maxLength: 50,
                       icon: Icons.location_city,
                       inputType: TextInputType.text,
                       onSaved: (value) {
