@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
 import 'package:project_v/shared_widgets/button.dart';
 import 'package:project_v/shared_widgets/input_text_field.dart';
+import 'package:project_v/shared_widgets/profile_image_picker.dart';
 import 'package:project_v/shared_widgets/text_button.dart';
 
 import '../../../app/utils/constants/sizes.dart';
@@ -30,41 +29,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String _enteredCity = '';
   bool _agreedToTerms = false;
   File? _selectedImage;
-
-  // Fungsi untuk memilih dan memotong gambar
-  Future<void> _pickImage(ImageSource source) async {
-    final imagePicker = ImagePicker();
-    final pickedImageFile = await imagePicker.pickImage(
-      source: source,
-      imageQuality: 80,
-    );
-
-    if (pickedImageFile == null) return;
-
-    final croppedFile = await ImageCropper().cropImage(
-      sourcePath: pickedImageFile.path,
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Sesuaikan Profile',
-          toolbarColor: Theme.of(context).colorScheme.primary,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.square,
-          lockAspectRatio: true,
-        ), // Kunci rasio agar tetap persegi
-        IOSUiSettings(
-          title: 'Potong Gambar',
-          aspectRatioLockEnabled: true,
-          aspectRatioPickerButtonHidden: true,
-        ),
-      ],
-    );
-
-    if (croppedFile == null) return;
-
-    setState(() {
-      _selectedImage = File(croppedFile.path);
-    });
-  }
 
   void _submitSignUp() {
     final isValid = _form.currentState!.validate();
@@ -129,69 +93,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
-                    Center(
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.grey.shade200,
-                            backgroundImage: _selectedImage != null
-                                ? FileImage(_selectedImage!)
-                                : null,
-                            child: _selectedImage == null
-                                ? Icon(
-                                    Icons.person,
-                                    size: 50,
-                                    color: Colors.grey.shade800,
-                                  )
-                                : null,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  // Tampilkan pilihan kamera atau galeri
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ListTile(
-                                          leading: const Icon(Icons.camera_alt),
-                                          title: const Text('Kamera'),
-                                          onTap: () {
-                                            Navigator.of(ctx).pop();
-                                            _pickImage(ImageSource.camera);
-                                          },
-                                        ),
-                                        ListTile(
-                                          leading: const Icon(
-                                            Icons.photo_library,
-                                          ),
-                                          title: const Text('Galeri'),
-                                          onTap: () {
-                                            Navigator.of(ctx).pop();
-                                            _pickImage(ImageSource.gallery);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
+                    // widget profile image picker
+                    ProfileImagePicker(
+                      onImageSelected: (image) {
+                        setState(() {
+                          _selectedImage = image;
+                        });
+                      },
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
                     TInputTextField(
