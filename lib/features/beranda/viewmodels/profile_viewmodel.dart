@@ -11,7 +11,3 @@ final profileServiceProvider = Provider((ref) => ProfileService());
 final profileProvider = FutureProvider<Profile>((ref) {
   return ref.watch(profileServiceProvider).getProfile();
 });
-
-/*
-======= Get Profile end =======
- */
