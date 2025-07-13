@@ -4,11 +4,10 @@ import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/sizes.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
 import 'package:project_v/features/beranda/viewmodels/profile_viewmodel.dart';
-import 'package:project_v/features/beranda/views/widgets/popular_package_section.dart';
+import 'package:project_v/features/beranda/views/widgets/gridview_section.dart';
 import 'package:project_v/shared_widgets/app_bar.dart';
 import 'package:project_v/shared_widgets/banner_slider.dart';
 
-import '../../../app/utils/constants/images.dart';
 import '../../../shared_widgets/package_card.dart';
 
 class BerandaScreen extends ConsumerWidget {
@@ -17,7 +16,6 @@ class BerandaScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsyncValue = ref.watch(profileProvider);
-    const bannerList = TImages.mainBannerList;
     final popularPackagesAsyncValue = ref.watch(
       packagesProvider(PackageFilter.popular),
     );
@@ -56,8 +54,9 @@ class BerandaScreen extends ConsumerWidget {
                 const SizedBox(height: TSizes.spaceBtwSections),
 
                 // etalase paket populer
-                PopularPackageSection(
-                  popularPackagesAsyncValue: popularPackagesAsyncValue,
+                GridviewSection(
+                  packagesAsyncValue: popularPackagesAsyncValue,
+                  titleSection: 'Paket Popular',
                 ),
                 const SizedBox(height: TSizes.spaceBtwSections),
 

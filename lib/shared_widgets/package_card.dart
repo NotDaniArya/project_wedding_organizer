@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/models/packages.dart';
+import '../features/detail_paket/views/detail_screen.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({super.key, required this.package});
@@ -20,7 +21,14 @@ class PackageCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailScreen(packageId: package.id),
+            ),
+          );
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

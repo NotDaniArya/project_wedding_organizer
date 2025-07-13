@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/text_strings.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
-import 'package:project_v/features/beranda/views/beranda_screen.dart';
+import 'package:project_v/navigation_menu.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final theme = ThemeData().copyWith(
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
 
           if (session != null) {
             // Jika ada session, pengguna sudah login -> tampilkan HomeScreen
-            return const BerandaScreen();
+            return const NavigationMenu();
           } else {
             // Jika tidak ada session, pengguna belum login -> tampilkan LoginScreen
             return const LoginScreen();

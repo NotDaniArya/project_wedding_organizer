@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/register_screen.dart';
+import 'package:project_v/navigation_menu.dart';
 import 'package:project_v/shared_widgets/button.dart';
 import 'package:project_v/shared_widgets/input_text_field.dart';
 import 'package:project_v/shared_widgets/text_button.dart';
 
 import '../../../app/utils/constants/sizes.dart';
-import '../../beranda/views/beranda_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -44,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             );
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BerandaScreen()),
+              MaterialPageRoute(builder: (context) => const NavigationMenu()),
             );
           },
           onError: (error) =>

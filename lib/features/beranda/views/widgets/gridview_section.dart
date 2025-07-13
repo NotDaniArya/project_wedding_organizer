@@ -4,35 +4,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/packages.dart';
 import '../../../../shared_widgets/package_card.dart';
 
-class PopularPackageSection extends StatelessWidget {
-  const PopularPackageSection({
+class GridviewSection extends StatelessWidget {
+  const GridviewSection({
     super.key,
-    required this.popularPackagesAsyncValue,
+    required this.packagesAsyncValue,
+    required this.titleSection,
   });
 
-  final AsyncValue<List<Packages>> popularPackagesAsyncValue;
+  final AsyncValue<List<Packages>> packagesAsyncValue;
+  final String titleSection;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsetsGeometry.symmetric(horizontal: 12),
+      margin: const EdgeInsetsGeometry.symmetric(horizontal: 12, vertical: 24),
       padding: const EdgeInsetsGeometry.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Paket Popular',
+            titleSection,
             style: Theme.of(
               context,
             ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
-          popularPackagesAsyncValue.when(
+          const SizedBox(height: 16),
+          packagesAsyncValue.when(
             data: (packages) {
               return GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -40,8 +43,8 @@ class PopularPackageSection extends StatelessWidget {
                 itemCount: packages.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
                   childAspectRatio: 1 / 1.5,
                 ),
                 itemBuilder: (context, index) {

@@ -42,4 +42,18 @@ class PackagesService {
       throw Exception('Gagal mengambil paket popular: $e');
     }
   }
+
+  Future<Packages> getPackageById(String packageId) async {
+    try {
+      final res = await supabase
+          .from('packages')
+          .select()
+          .eq('id', packageId)
+          .single();
+
+      return Packages.fromJson(res);
+    } catch (e) {
+      throw Exception('Gagal mengambil data paket: $e');
+    }
+  }
 }
