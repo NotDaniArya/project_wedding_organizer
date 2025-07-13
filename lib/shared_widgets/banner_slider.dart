@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:project_v/app/utils/constants/images.dart'; // Pastikan path ini benar
+import 'package:project_v/app/utils/constants/images.dart';
 
 class BannerSlider extends StatefulWidget {
   const BannerSlider({super.key});
@@ -66,9 +66,8 @@ class _BannerSliderState extends State<BannerSlider> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  width: _currentIndex == index
-                      ? 24.0
-                      : 8.0, // Lebar berubah saat aktif
+                  width: _currentIndex == index ? 24.0 : 8.0,
+                  // Lebar berubah saat aktif
                   height: 8.0,
                   margin: const EdgeInsets.symmetric(horizontal: 4.0),
                   decoration: BoxDecoration(

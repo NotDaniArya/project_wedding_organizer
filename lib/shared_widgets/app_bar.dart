@@ -45,7 +45,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
               await supabase.auth.signOut();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             },
             icon: const Icon(Icons.favorite, color: Colors.white),

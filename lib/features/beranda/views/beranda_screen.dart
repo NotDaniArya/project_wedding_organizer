@@ -4,9 +4,11 @@ import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/sizes.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
 import 'package:project_v/features/beranda/viewmodels/profile_viewmodel.dart';
+import 'package:project_v/features/beranda/views/widgets/popular_package_section.dart';
 import 'package:project_v/shared_widgets/app_bar.dart';
 import 'package:project_v/shared_widgets/banner_slider.dart';
 
+import '../../../app/utils/constants/images.dart';
 import '../../../shared_widgets/package_card.dart';
 
 class BerandaScreen extends ConsumerWidget {
@@ -15,6 +17,7 @@ class BerandaScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsyncValue = ref.watch(profileProvider);
+    const bannerList = TImages.mainBannerList;
     final popularPackagesAsyncValue = ref.watch(
       packagesProvider(PackageFilter.popular),
     );
@@ -23,7 +26,6 @@ class BerandaScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
       appBar: profileAsyncValue.when(
         // Saat data berhasil dimuat
         data: (profile) =>
@@ -34,56 +36,81 @@ class BerandaScreen extends ConsumerWidget {
         error: (err, stack) => const TAppBar(name: 'Error'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            // mainAxisSize: MainAxisSize.min,
-            children: [
-              const BannerSlider(),
-              const SizedBox(height: TSizes.spaceBtwSections),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsetsGeometry.symmetric(horizontal: 12),
-                padding: const EdgeInsetsGeometry.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                TColors.primaryColor,
+                TColors.primaryColor.withOpacity(0.7),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                // banner slide
+                const BannerSlider(),
+                const SizedBox(height: TSizes.spaceBtwSections),
+
+                // etalase paket populer
+                PopularPackageSection(
+                  popularPackagesAsyncValue: popularPackagesAsyncValue,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Paket Popular',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
+                const SizedBox(height: TSizes.spaceBtwSections),
+
+                // etalase paket promo
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsetsGeometry.symmetric(horizontal: 12),
+                  padding: const EdgeInsetsGeometry.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Paket Promo Diskon',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    popularPackagesAsyncValue.when(
-                      data: (packages) {
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: packages.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 8,
-                                childAspectRatio: 0.8,
-                              ),
-                          itemBuilder: (context, index) {
-                            return PackageCard(package: packages[index]);
-                          },
-                        );
-                      },
-                      error: (err, stack) => Center(child: Text('Error: $err')),
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      discountPackagesAsyncValue.when(
+                        data: (packages) {
+                          return SizedBox(
+                            height: 250,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: packages.length,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  width: 180,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: PackageCard(
+                                      package: packages[index],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        error: (err, stack) =>
+                            Center(child: Text('Error: $err')),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
