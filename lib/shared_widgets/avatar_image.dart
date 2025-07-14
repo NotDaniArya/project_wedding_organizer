@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AvatarImage extends StatelessWidget {
-  const AvatarImage({super.key, required this.imageUrl});
+  const AvatarImage({super.key, required this.imageUrl, this.radius = 20});
 
   final String? imageUrl;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 20,
+      radius: radius,
+
       backgroundColor: Colors.grey.shade200,
       backgroundImage: (imageUrl != null && imageUrl!.isNotEmpty)
           ? NetworkImage(imageUrl!)

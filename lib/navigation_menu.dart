@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_v/features/paket/views/paket_screen.dart';
+import 'package:project_v/features/profile/views/profile_screen.dart';
 
 import 'app/utils/constants/colors.dart';
 import 'features/beranda/views/beranda_screen.dart';
@@ -25,13 +26,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         decoration: const BoxDecoration(color: Colors.blue),
       ),
     ),
-    Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.yellow),
-      ),
-    ),
+    const ProfileScreen(),
   ];
 
   void _onSelectedMenu(int index) {

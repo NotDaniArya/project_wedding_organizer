@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
-import 'package:project_v/main.dart';
 import 'package:project_v/shared_widgets/avatar_image.dart';
-
-import '../features/auth/views/login_screen.dart';
 
 class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TAppBar({super.key, this.name, this.imageUrl});
@@ -39,16 +36,6 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            onPressed: () async {
-              await supabase.auth.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-            icon: const Icon(Icons.favorite, color: Colors.white),
           ),
         ],
       ),
