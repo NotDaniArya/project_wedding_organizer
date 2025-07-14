@@ -12,6 +12,9 @@
 .swiftpm/
 migrate_working_dir/
 
+# supabase key
+lib/app/utils/constants/text_strings.dart
+
 # IntelliJ related
 *.iml
 *.ipr
