@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
 
 import '../../../app/utils/constants/colors.dart';
@@ -168,7 +169,9 @@ class DetailScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          MyHelperFunction.launchURL('https://wa.me/6282188971812');
+        },
         backgroundColor: Colors.green.shade400,
         child: const FaIcon(FontAwesomeIcons.whatsapp),
       ),

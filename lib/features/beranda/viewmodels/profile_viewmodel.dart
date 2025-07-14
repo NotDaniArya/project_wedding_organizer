@@ -3,7 +3,7 @@ import 'package:project_v/core/models/profile.dart';
 import 'package:project_v/core/services/profile_service.dart';
 
 /*
-======= Get Profile untuk profile user =======
+======= provider untuk profile service =======
  */
 
 final profileServiceProvider = Provider((ref) => ProfileService());

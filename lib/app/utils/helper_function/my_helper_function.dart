@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHelperFunction {
   // notifikasi toast
@@ -20,5 +21,13 @@ class MyHelperFunction {
       style: ToastificationStyle.flatColored,
       alignment: Alignment.bottomCenter,
     );
+  }
+
+  // membuka URL (WhatsApp, Email, dll)
+  static Future<void> launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

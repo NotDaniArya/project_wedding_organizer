@@ -4,7 +4,7 @@ import '../../../core/models/packages.dart';
 import '../../../core/services/packages_service.dart';
 
 /*
-======= Get list paket =======
+======= provider untuk package service =======
  */
 
 // Enum untuk membuat parameter lebih aman dan mudah dibaca
@@ -31,11 +31,11 @@ final packagesProvider = FutureProvider.family<List<Packages>, PackageFilter>((
 });
 
 /*
-======= Get list paket end =======
+======= provider untuk package service end =======
  */
 
 /*
-======= Get detail paket =======
+======= provider untuk detail package =======
  */
 
 final packageDetailProvider = FutureProvider.family<Packages, String>((
@@ -46,5 +46,5 @@ final packageDetailProvider = FutureProvider.family<Packages, String>((
 });
 
 /*
-======= Get detail paket end =======
+======= provider untuk detail package end =======
  */

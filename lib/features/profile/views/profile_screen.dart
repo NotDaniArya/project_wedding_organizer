@@ -8,6 +8,8 @@ import 'package:project_v/shared_widgets/menu_item.dart';
 
 import '../../auth/viewmodels/auth_viewmodel.dart';
 import '../../auth/views/login_screen.dart';
+import '../../help_center/views/help_center_screen.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -91,14 +93,25 @@ class ProfileScreen extends ConsumerWidget {
                       MenuItem(
                         icon: Icons.edit_outlined,
                         title: 'Edit Profil',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EditProfileScreen(profile: profile),
+                            ),
+                          );
+                        },
                       ),
                       const Divider(height: 1, indent: 12, endIndent: 12),
                       MenuItem(
                         icon: Icons.help_outline,
                         title: 'Pusat Bantuan',
                         onTap: () {
-                          // TODO: Navigasi ke halaman Favorit
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const HelpCenterScreen(),
+                            ),
+                          );
                         },
                       ),
                     ],

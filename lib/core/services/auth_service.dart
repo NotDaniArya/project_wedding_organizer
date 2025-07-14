@@ -18,7 +18,7 @@ class AuthService {
     File? avatarFile,
   }) async {
     try {
-      // 1. Buat user baru di Supabase Auth
+      // Buat user baru di Supabase Auth
       final res = await _auth.signUp(email: email, password: password);
 
       // Jika user berhasil dibuat, lanjutkan

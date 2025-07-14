@@ -6,12 +6,13 @@ class TInputTextField extends StatelessWidget {
     required this.labelText,
     required this.icon,
     required this.inputType,
-    required this.onSaved,
+    this.onSaved,
     this.minLength = 6,
     this.maxLength = 30,
     this.autoCorrect = false,
     this.enableSuggestions = false,
     this.obscureText = false,
+    this.controller,
   });
 
   final String labelText;
@@ -21,12 +22,14 @@ class TInputTextField extends StatelessWidget {
   final TextInputType inputType;
   final bool autoCorrect;
   final bool enableSuggestions;
-  final void Function(String? value) onSaved;
+  final void Function(String? value)? onSaved;
   final bool obscureText;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         isDense: true,

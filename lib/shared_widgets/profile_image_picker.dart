@@ -5,9 +5,14 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileImagePicker extends StatefulWidget {
-  const ProfileImagePicker({super.key, required this.onImageSelected});
+  const ProfileImagePicker({
+    super.key,
+    required this.onImageSelected,
+    this.initialImageUrl,
+  });
 
   final void Function(File image) onImageSelected;
+  final String? initialImageUrl;
 
   @override
   State<ProfileImagePicker> createState() => _ProfileImagePickerState();
@@ -55,16 +60,22 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider? backgroundImage;
+    if (_pickedImageFile != null) {
+      backgroundImage = FileImage(_pickedImageFile!);
+    } else if (widget.initialImageUrl != null &&
+        widget.initialImageUrl!.isNotEmpty) {
+      backgroundImage = NetworkImage(widget.initialImageUrl!);
+    }
+
     return Center(
       child: Stack(
         children: [
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.grey.shade200,
-            backgroundImage: _pickedImageFile != null
-                ? FileImage(_pickedImageFile!)
-                : null,
-            child: _pickedImageFile == null
+            backgroundImage: backgroundImage,
+            child: backgroundImage == null
                 ? Icon(Icons.person, size: 50, color: Colors.grey.shade800)
                 : null,
           ),
