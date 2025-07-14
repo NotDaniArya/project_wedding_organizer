@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:project_v/app/utils/constants/colors.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   const ProfileImagePicker({
@@ -86,6 +87,9 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
               radius: 20,
               backgroundColor: Theme.of(context).primaryColor,
               child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: TColors.primaryColor,
+                ),
                 icon: const Icon(
                   Icons.camera_alt,
                   color: Colors.white,
