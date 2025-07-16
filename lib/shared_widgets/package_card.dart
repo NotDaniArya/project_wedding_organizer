@@ -10,7 +10,6 @@ class PackageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPackageDiscount = package.isDiscount == true;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -33,48 +32,21 @@ class PackageCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    package.imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey.shade200,
-                      child: Icon(
-                        Icons.broken_image_outlined,
-                        color: Colors.grey.shade400,
-                        size: 40,
-                      ),
-                    ),
+              child: Image.network(
+                package.imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: Colors.grey.shade200,
+                  child: Icon(
+                    Icons.broken_image_outlined,
+                    color: Colors.grey.shade400,
+                    size: 40,
                   ),
-                  if (isPackageDiscount)
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: colorScheme.error, // Warna merah untuk diskon
-                        ),
-                        child: Text(
-                          '${package.discountPercentage?.toStringAsFixed(0)}% OFF',
-                          style: textTheme.labelSmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+                ),
               ),
             ),
             // --- Bagian Teks (Nama & Harga) ---
@@ -93,38 +65,13 @@ class PackageCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-
-                  // Harga
-                  if (isPackageDiscount)
-                    // Tampilan jika ada diskon
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          package.formattedPrice, // Harga asli dicoret
-                          style: textTheme.bodySmall!.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        Text(
-                          package.formattedFinalPrice, // Harga final
-                          style: textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    // Tampilan jika tidak ada diskon
-                    Text(
-                      package.formattedPrice,
-                      style: textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
+                  Text(
+                    package.formattedPrice,
+                    style: textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
                     ),
+                  ),
                 ],
               ),
             ),

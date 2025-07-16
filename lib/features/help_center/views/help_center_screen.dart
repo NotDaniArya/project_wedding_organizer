@@ -67,7 +67,7 @@ class HelpCenterScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildFaqItem(
               'Bagaimana cara memesan paket?',
-              'Anda dapat memesan paket dengan memilih salah satu paket di halaman "Paket", lalu tekan tombol "Pesan Sekarang" pada halaman detail. Anda akan diarahkan untuk mengisi formulir pemesanan.',
+              'Anda dapat memesan paket dengan memilih salah satu paket di halaman "Beranda", lalu tekan tombol "Reservasi" pada halaman detail. Anda akan diarahkan untuk mengisi formulir pemesanan.',
             ),
             _buildFaqItem(
               'Apa saja metode pembayaran yang diterima?',
@@ -75,7 +75,7 @@ class HelpCenterScreen extends StatelessWidget {
             ),
             _buildFaqItem(
               'Bisakah saya mengubah tanggal reservasi?',
-              'Untuk perubahan tanggal, silakan hubungi tim kami langsung melalui WhatsApp atau email yang tertera di bawah ini agar kami dapat memeriksa ketersediaan jadwal.',
+              'Untuk perubahan tanggal, silakan hubungi tim kami langsung melalui WhatsApp yang tertera di bawah ini agar kami dapat memeriksa ketersediaan jadwal.',
             ),
 
             const Divider(height: 40),
@@ -95,18 +95,6 @@ class HelpCenterScreen extends StatelessWidget {
               subtitle: '+62 812 3456 7890',
               onTap: () {
                 MyHelperFunction.launchURL('https://wa.me/6282188971812');
-              },
-            ),
-            _buildContactItem(
-              context: context,
-              icon: Icons.email_outlined,
-              title: 'Email',
-              subtitle: 'ilhmbachtiar15@gmail.com',
-              onTap: () {
-                // Ganti email dengan email Anda
-                MyHelperFunction.launchURL(
-                  'mailto:ilhmbachtiar15@gmail.com?subject=Bantuan Aplikasi',
-                );
               },
             ),
 

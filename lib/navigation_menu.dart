@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_v/features/paket/views/paket_screen.dart';
 import 'package:project_v/features/profile/views/profile_screen.dart';
 
 import 'app/utils/constants/colors.dart';
@@ -18,7 +17,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   // Daftar semua layar yang akan ditampilkan
   static final List<Widget> _listMenu = [
     const BerandaScreen(),
-    const PaketScreen(),
+    // const PaketScreen(),
     Scaffold(
       body: Container(
         height: double.infinity,
@@ -48,11 +47,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
             activeIcon: Icon(Icons.home),
             label: 'Beranda',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory_2_outlined),
-            activeIcon: Icon(Icons.inventory_2),
-            label: 'Paket',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.inventory_2_outlined),
+          //   activeIcon: Icon(Icons.inventory_2),
+          //   label: 'Paket',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long_outlined),
             activeIcon: Icon(Icons.receipt_long),

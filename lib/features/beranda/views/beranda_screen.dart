@@ -8,20 +8,13 @@ import 'package:project_v/features/beranda/views/widgets/gridview_section.dart';
 import 'package:project_v/shared_widgets/app_bar.dart';
 import 'package:project_v/shared_widgets/banner_slider.dart';
 
-import '../../../shared_widgets/package_card.dart';
-
 class BerandaScreen extends ConsumerWidget {
   const BerandaScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsyncValue = ref.watch(profileProvider);
-    final popularPackagesAsyncValue = ref.watch(
-      packagesProvider(PackageFilter.popular),
-    );
-    final discountPackagesAsyncValue = ref.watch(
-      packagesProvider(PackageFilter.discount),
-    );
+    final packageAsyncValue = ref.watch(packagesProvider);
 
     return Scaffold(
       appBar: profileAsyncValue.when(
@@ -53,61 +46,12 @@ class BerandaScreen extends ConsumerWidget {
                 const BannerSlider(),
                 const SizedBox(height: TSizes.spaceBtwSections),
 
-                // etalase paket populer
+                // etalase paket
                 GridviewSection(
-                  packagesAsyncValue: popularPackagesAsyncValue,
-                  titleSection: 'Paket Popular',
+                  packagesAsyncValue: packageAsyncValue,
+                  titleSection: 'Semua Paket',
                 ),
                 const SizedBox(height: TSizes.spaceBtwSections),
-
-                // etalase paket promo
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsetsGeometry.symmetric(horizontal: 12),
-                  padding: const EdgeInsetsGeometry.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Paket Promo Diskon',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      discountPackagesAsyncValue.when(
-                        data: (packages) {
-                          return SizedBox(
-                            height: 250,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: packages.length,
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  width: 180,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: PackageCard(
-                                      package: packages[index],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        error: (err, stack) =>
-                            Center(child: Text('Error: $err')),
-                        loading: () =>
-                            const Center(child: CircularProgressIndicator()),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),

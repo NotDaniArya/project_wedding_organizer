@@ -11,6 +11,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: TColors.primaryColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

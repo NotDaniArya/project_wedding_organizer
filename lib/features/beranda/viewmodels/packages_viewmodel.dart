@@ -7,27 +7,10 @@ import '../../../core/services/packages_service.dart';
 ======= provider untuk package service =======
  */
 
-// Enum untuk membuat parameter lebih aman dan mudah dibaca
-enum PackageFilter { all, popular, discount }
-
 final packagesServiceProvider = Provider((ref) => PackagesService());
 
-final packagesProvider = FutureProvider.family<List<Packages>, PackageFilter>((
-  ref,
-  filter,
-) {
-  final service = ref.watch(packagesServiceProvider);
-
-  // switch untuk memanggil fungsi yang sesuai berdasarkan filter
-  switch (filter) {
-    case PackageFilter.popular:
-      return service.getPopularPackages();
-    case PackageFilter.discount:
-      return service.getDiscountPackages();
-    case PackageFilter.all:
-    default:
-      return service.getAllPackages();
-  }
+final packagesProvider = FutureProvider<List<Packages>>((ref) {
+  return ref.watch(packagesServiceProvider).getAllPackages();
 });
 
 /*

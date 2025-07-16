@@ -13,36 +13,6 @@ class PackagesService {
     }
   }
 
-  Future<List<Packages>> getDiscountPackages() async {
-    try {
-      final res = await supabase
-          .from('packages')
-          .select()
-          .eq('is_discount', true);
-
-      final discountPackages = res
-          .map((map) => Packages.fromJson(map))
-          .toList();
-      return discountPackages;
-    } catch (e) {
-      throw Exception('Gagal mengambil paket diskon: $e');
-    }
-  }
-
-  Future<List<Packages>> getPopularPackages() async {
-    try {
-      final res = await supabase
-          .from('packages')
-          .select()
-          .eq('is_popular', true);
-
-      final popularPackages = res.map((map) => Packages.fromJson(map)).toList();
-      return popularPackages;
-    } catch (e) {
-      throw Exception('Gagal mengambil paket popular: $e');
-    }
-  }
-
   Future<Packages> getPackageById(String packageId) async {
     try {
       final res = await supabase

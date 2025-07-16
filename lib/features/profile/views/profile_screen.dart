@@ -56,6 +56,7 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Profile Saya'),
         backgroundColor: TColors.primaryColor,
         foregroundColor: Colors.white,

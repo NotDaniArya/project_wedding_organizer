@@ -22,9 +22,6 @@ class DetailScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
         data: (package) {
-          // untuk mengecek apakah paket diskon atau tidak
-          final isPackageDiscount = package.isDiscount == true;
-
           return CustomScrollView(
             slivers: [
               // AppBar yang bisa mengecil saat di-scroll
@@ -62,70 +59,12 @@ class DetailScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      if (isPackageDiscount)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: colorScheme.error,
-                              ),
-                              child: Text(
-                                '${package.discountPercentage?.toStringAsFixed(0)}% OFF',
-                                style: textTheme.labelSmall!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  package.formattedPrice,
-                                  style: textTheme.titleLarge?.copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  package.formattedFinalPrice,
-                                  style: textTheme.headlineSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: TColors.primaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      else
-                        Text(
-                          package.formattedPrice,
-                          style: textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: TColors.primaryColor,
-                          ),
-                        ),
-
-                      const Divider(height: 40),
-
-                      // Deskripsi
                       Text(
-                        'Deskripsi',
-                        style: textTheme.titleLarge?.copyWith(
+                        package.formattedPrice,
+                        style: textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: TColors.primaryColor,
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        package.description,
-                        style: textTheme.bodyLarge?.copyWith(height: 1.5),
                       ),
 
                       const Divider(height: 40),
@@ -191,10 +130,7 @@ class DetailScreen extends ConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          child: const Text(
-            'Pesan Sekarang',
-            style: TextStyle(color: Colors.white),
-          ),
+          child: const Text('Reservasi', style: TextStyle(color: Colors.white)),
         ),
       ),
     );
