@@ -4,7 +4,6 @@ class TInputTextField extends StatelessWidget {
   const TInputTextField({
     super.key,
     required this.labelText,
-    required this.icon,
     required this.inputType,
     this.onSaved,
     this.minLength = 6,
@@ -12,11 +11,9 @@ class TInputTextField extends StatelessWidget {
     this.autoCorrect = false,
     this.enableSuggestions = false,
     this.obscureText = false,
-    this.controller,
   });
 
   final String labelText;
-  final IconData icon;
   final int maxLength;
   final int minLength;
   final TextInputType inputType;
@@ -24,16 +21,13 @@ class TInputTextField extends StatelessWidget {
   final bool enableSuggestions;
   final void Function(String? value)? onSaved;
   final bool obscureText;
-  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         isDense: true,
-        prefixIcon: Icon(icon),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
       maxLength: maxLength,

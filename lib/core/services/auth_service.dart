@@ -13,47 +13,15 @@ class AuthService {
     required String password,
     required String fullName,
     required String phoneNumber,
-    required String address,
-    required String city,
     File? avatarFile,
   }) async {
     try {
-      // Buat user baru di Supabase Auth
+      // buat user baru di Supabase auth
       final res = await _auth.signUp(email: email, password: password);
 
-      // Jika user berhasil dibuat, lanjutkan
+      // jika user berhasil dibuat maka login
       if (res.user != null) {
-        // 2. Lakukan login untuk mengaktifkan sesi sepenuhnya
         await _auth.signInWithPassword(email: email, password: password);
-
-        String? avatarUrl;
-        // Jika ada file avatar yang dipilih, upload ke storage
-        if (avatarFile != null) {
-          final userId = res.user!.id;
-          final fileExt = avatarFile.path
-              .split('.')
-              .last; // .split(.) memisahkan file menjadi list berdasarkan titik dan .last mengambil ekstensi file dari gambar yang dipilih
-          final fileName = '$userId/user-profile.$fileExt';
-
-          // Upload file
-          await _client.storage
-              .from('user-profile')
-              .upload(
-                fileName,
-                avatarFile,
-                fileOptions: const FileOptions(
-                  cacheControl:
-                      '3600', // menyimpan salinan gambar ke browser selama 3600 detik (1 jam)
-                  upsert:
-                      true, // menimpa gambar jika ada gambar yang sama namanya
-                ),
-              );
-
-          // Dapatkan URL publik dari gambar yang diupload
-          avatarUrl = _client.storage
-              .from('user-profile')
-              .getPublicUrl(fileName);
-        }
 
         // Langkah 3: Sekarang, insert data profil.
         await _client.from('profiles').insert({
@@ -61,9 +29,6 @@ class AuthService {
           'full_name': fullName,
           'email': email,
           'no_hp': phoneNumber,
-          'address': address,
-          'city': city,
-          'avatar_url': avatarUrl,
         });
       }
     } on AuthException catch (e) {

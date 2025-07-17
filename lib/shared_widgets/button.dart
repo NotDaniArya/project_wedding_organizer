@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_v/app/utils/constants/colors.dart';
 
 class MyButton extends StatelessWidget {
   const MyButton({super.key, required this.text, required this.onPressed});
@@ -11,7 +12,7 @@ class MyButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: ColorScheme.of(context).primary,
+        backgroundColor: TColors.primaryColor,
         padding: const EdgeInsetsGeometry.symmetric(
           vertical: 10,
           horizontal: 30,

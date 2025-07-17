@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_v/features/profile/views/profile_screen.dart';
 
 import 'app/utils/constants/colors.dart';
 import 'features/beranda/views/beranda_screen.dart';
@@ -25,7 +24,20 @@ class _NavigationMenuState extends State<NavigationMenu> {
         decoration: const BoxDecoration(color: Colors.blue),
       ),
     ),
-    const ProfileScreen(),
+    Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(color: Colors.yellow),
+      ),
+    ),
+    Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(color: Colors.orange),
+      ),
+    ),
   ];
 
   void _onSelectedMenu(int index) {
@@ -41,26 +53,26 @@ class _NavigationMenuState extends State<NavigationMenu> {
       body: _listMenu.elementAt(_selectedIndex),
 
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
             label: 'Beranda',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.inventory_2_outlined),
-          //   activeIcon: Icon(Icons.inventory_2),
-          //   label: 'Paket',
-          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long_outlined),
-            activeIcon: Icon(Icons.receipt_long),
-            label: 'Reservasiku',
+            icon: Icon(Icons.chat_outlined),
+            activeIcon: Icon(Icons.chat),
+            label: 'Chat Admin',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
+            icon: Icon(Icons.attach_money_outlined),
+            activeIcon: Icon(Icons.attach_money_outlined),
+            label: 'Pembayaran',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month_outlined),
+            activeIcon: Icon(Icons.calendar_month),
+            label: 'Tanggal',
           ),
         ],
         currentIndex: _selectedIndex,

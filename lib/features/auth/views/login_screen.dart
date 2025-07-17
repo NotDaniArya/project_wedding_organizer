@@ -21,6 +21,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _form = GlobalKey<FormState>();
   String _enteredEmail = '';
   String _enteredPass = '';
+  bool _isPasswordVisible = false;
 
   void _submitSignIn() {
     final isValid = _form.currentState!.validate();
@@ -64,16 +65,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 150,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: TSizes.spaceBtwItems),
               Text(
-                'Ingin pernikahanmu lebih mudah?\nKami yang atur kamu terima beres',
-                style: Theme.of(context).textTheme.titleMedium,
+                'LOGIN\n V PROJECT WO',
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 20),
               Form(
@@ -82,31 +79,67 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TInputTextField(
-                      labelText: 'Email',
-                      icon: Icons.email,
+                      labelText: 'Enter Your Email',
                       inputType: TextInputType.emailAddress,
                       onSaved: (value) {
                         _enteredEmail = value!;
                       },
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
-                    TInputTextField(
-                      obscureText: true,
-                      labelText: 'Password',
+                    TextFormField(
+                      obscureText: !_isPasswordVisible,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Enter Your Password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
+                        isDense: true,
+                      ),
                       maxLength: 15,
-                      icon: Icons.lock,
-                      inputType: TextInputType.text,
+                      autocorrect: false,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.trim().length < 4) {
+                          return 'Panjang input minimal 4 karakter';
+                        }
+
+                        return null;
+                      },
                       onSaved: (value) {
                         _enteredPass = value!;
                       },
                     ),
-                    const SizedBox(height: TSizes.spaceBtwItems),
+                    const SizedBox(height: TSizes.spaceBtwItems / 4),
+                    TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                      ),
+                      child: const Text('Forgot Password?'),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwItems / 4),
                     isLoading
                         ? const CircularProgressIndicator()
                         : MyButton(text: 'Login', onPressed: _submitSignIn),
                   ],
                 ),
               ),
+
               const SizedBox(height: TSizes.defaultSpace / 10),
               const MyTextButton(
                 text: 'Belum punya akun?',

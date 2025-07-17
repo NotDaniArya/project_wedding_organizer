@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
@@ -7,7 +5,6 @@ import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
 import 'package:project_v/shared_widgets/button.dart';
 import 'package:project_v/shared_widgets/input_text_field.dart';
-import 'package:project_v/shared_widgets/profile_image_picker.dart';
 import 'package:project_v/shared_widgets/text_button.dart';
 
 import '../../../app/utils/constants/sizes.dart';
@@ -25,25 +22,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String _enteredEmail = '';
   String _enteredPass = '';
   String _enteredPhoneNumber = '';
-  String _enteredAddress = '';
-  String _enteredCity = '';
   bool _agreedToTerms = false;
-  File? _selectedImage;
+  bool _isPasswordVisible = false;
 
   void _submitSignUp() {
     final isValid = _form.currentState!.validate();
 
     if (!isValid) {
-      return;
-    }
-
-    // validator image picker
-    if (_selectedImage == null) {
-      MyHelperFunction.toastNotification(
-        'Harap pilih foto profil Anda.',
-        false,
-        context,
-      );
       return;
     }
 
@@ -56,9 +41,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           password: _enteredPass.trim(),
           fullName: _enteredFullName.trim(),
           phoneNumber: _enteredPhoneNumber.trim(),
-          address: _enteredAddress.trim(),
-          city: _enteredCity.trim(),
-          avatarFile: _selectedImage,
           onSuccess: () {
             MyHelperFunction.toastNotification(
               'Berhasil mendaftar. Silahkan login!',
@@ -91,33 +73,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   children: [
                     const SizedBox(height: 20),
                     Text(
-                      'Daftar',
+                      'SIGNUP\n V PROJECT WO',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium!
+                      style: Theme.of(context).textTheme.headlineSmall!
                           .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwItems / 2),
-                    Text(
-                      'Pastikan data yang anda masukkan adalah data asli dan lengkap untuk memastikan tidak ada masalah pada saat melakuakan reservasi',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwSections),
-
-                    // widget profile image picker
-                    ProfileImagePicker(
-                      onImageSelected: (image) {
-                        setState(() {
-                          _selectedImage = image;
-                        });
-                      },
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
                     TInputTextField(
-                      labelText: 'Nama Lengkap',
-                      maxLength: 100,
+                      labelText: 'Enter Your Username',
+                      maxLength: 20,
                       minLength: 4,
-                      icon: Icons.person,
                       inputType: TextInputType.name,
                       onSaved: (value) {
                         _enteredFullName = value!;
@@ -125,8 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TInputTextField(
-                      labelText: 'Email',
-                      icon: Icons.email,
+                      labelText: 'Enter Your Email',
                       inputType: TextInputType.emailAddress,
                       onSaved: (value) {
                         _enteredEmail = value!;
@@ -134,8 +98,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TInputTextField(
-                      labelText: 'Nomor Hp',
-                      icon: Icons.call,
+                      labelText: 'Enter Your Phone Number',
                       maxLength: 12,
                       minLength: 10,
                       inputType: TextInputType.number,
@@ -144,32 +107,39 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
-                    TInputTextField(
-                      labelText: 'Alamat',
-                      maxLength: 50,
-                      icon: Icons.home,
-                      inputType: TextInputType.text,
-                      onSaved: (value) {
-                        _enteredAddress = value!;
-                      },
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwItems),
-                    TInputTextField(
-                      labelText: 'Kota asal',
-                      maxLength: 50,
-                      icon: Icons.location_city,
-                      inputType: TextInputType.text,
-                      onSaved: (value) {
-                        _enteredCity = value!;
-                      },
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwItems),
-                    TInputTextField(
-                      obscureText: true,
-                      labelText: 'Password',
-                      icon: Icons.lock,
+                    TextFormField(
+                      obscureText: !_isPasswordVisible,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Enter Your Password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
+                        isDense: true,
+                      ),
                       maxLength: 15,
-                      inputType: TextInputType.text,
+                      autocorrect: false,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.trim().length < 4) {
+                          return 'Panjang input minimal 4 karakter';
+                        }
+
+                        return null;
+                      },
                       onSaved: (value) {
                         _enteredPass = value!;
                       },
@@ -221,10 +191,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     const SizedBox(height: TSizes.spaceBtwSections / 2),
                     isLoading
                         ? const Center(child: CircularProgressIndicator())
-                        : MyButton(text: 'Buat Akun', onPressed: _submitSignUp),
+                        : MyButton(text: 'Signup', onPressed: _submitSignUp),
                     const SizedBox(height: TSizes.defaultSpace / 10),
                     const MyTextButton(
-                      text: 'Sudah punya akun?',
+                      text: 'Already have an account?',
                       buttonText: 'Login',
                       route: LoginScreen(),
                     ),

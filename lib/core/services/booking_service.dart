@@ -25,7 +25,7 @@ class BookingService {
         'notes': notes,
       });
     } catch (e) {
-      throw Exception('Gagal membuat reservasi: $e');
+      throw Exception('Gagal membuat booking: $e');
     }
   }
 
@@ -55,7 +55,7 @@ class BookingService {
           .order('created_at', ascending: false);
       return res.map((bookings) => Booking.fromJson(bookings)).toList();
     } catch (e) {
-      throw Exception('Gagal mengambil data reservasi: $e');
+      throw Exception('Gagal mengambil data booking: $e');
     }
   }
 
@@ -73,7 +73,7 @@ class BookingService {
     }
   }
 
-  Future<void> uploadBookingProof({
+  Future<void> uploadPaymentProof({
     required String bookingId,
     required File proofFile,
   }) async {

@@ -74,7 +74,7 @@ class HelpCenterScreen extends StatelessWidget {
               'Saat ini kami hanya menerima metode pembayaran melalui transfer bank manual. Setelah melakukan pemesanan, Anda akan mendapatkan instruksi pembayaran dan dapat mengunggah bukti transfer Anda di halaman "Reservasiku".',
             ),
             _buildFaqItem(
-              'Bisakah saya mengubah tanggal reservasi?',
+              'Bisakah saya mengubah tanggal booking?',
               'Untuk perubahan tanggal, silakan hubungi tim kami langsung melalui WhatsApp yang tertera di bawah ini agar kami dapat memeriksa ketersediaan jadwal.',
             ),
 

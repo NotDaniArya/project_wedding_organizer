@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,9 +18,6 @@ class AuthViewModel extends StateNotifier<bool> {
     required String password,
     required String fullName,
     required String phoneNumber,
-    required String address,
-    required String city,
-    File? avatarFile,
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) async {
@@ -35,9 +30,6 @@ class AuthViewModel extends StateNotifier<bool> {
             password: password,
             fullName: fullName,
             phoneNumber: phoneNumber,
-            address: address,
-            city: city,
-            avatarFile: avatarFile,
           );
       onSuccess();
     } catch (e) {
