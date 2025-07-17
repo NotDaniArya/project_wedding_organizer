@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:project_v/app/utils/constants/colors.dart';
 
 import '../core/models/packages.dart';
 import '../features/detail_paket/views/detail_screen.dart';
@@ -32,14 +34,18 @@ class PackageCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Image.network(
-                package.imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: package.imageUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
-                },
-                errorBuilder: (context, error, stackTrace) => Container(
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        strokeWidth: 2,
+                        color: TColors.primaryColor,
+                      ),
+                    ),
+                errorWidget: (context, url, error) => Container(
                   color: Colors.grey.shade200,
                   child: Icon(
                     Icons.broken_image_outlined,
@@ -49,6 +55,7 @@ class PackageCard extends StatelessWidget {
                 ),
               ),
             ),
+
             // --- Bagian Teks (Nama & Harga) ---
             Padding(
               padding: const EdgeInsets.all(12.0),
