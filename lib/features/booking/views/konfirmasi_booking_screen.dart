@@ -35,25 +35,32 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
             packageId: package.id,
             bookingDate: selectedDate,
             totalPrice: totalPrice,
+            pax: paxCount.toString(),
             onSuccess: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const NavigationMenu()),
-              );
-
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Berhasil Booking'),
+                barrierDismissible: false,
+                builder: (dialogContext) => AlertDialog(
+                  title: const Text('Reservasi Berhasil'),
+                  content: const Text(
+                    'SELAMAT RESERVASI ANDA TELAH BERHASIL. SILAHKAN MENUNGGU INFORMASI SELANJUTNYA!!',
+                    textAlign: TextAlign.center,
+                  ),
                   actions: [
                     TextButton(
-                      child: const Text('Ok'),
-                      onPressed: () => Navigator.pop(context),
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NavigationMenu(),
+                          ),
+                          (route) => false,
+                        );
+                      },
                     ),
                   ],
-                  content: const Text(
-                    'Silahkan melakukan pembayaran ke nomor rekening (ILHAM) berikut:\nMandiri: 14100145448023\nBCA: 8630630699',
-                  ),
                 ),
               );
             },

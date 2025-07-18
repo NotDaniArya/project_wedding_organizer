@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/text_strings.dart';
 import 'package:project_v/features/auth/views/login_screen.dart';
@@ -18,6 +19,8 @@ final theme = ThemeData().copyWith(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('id_ID', null);
 
   // inisialisasi supabase
   await Supabase.initialize(url: TTexts.supabaseUrl, anonKey: TTexts.apiKey);

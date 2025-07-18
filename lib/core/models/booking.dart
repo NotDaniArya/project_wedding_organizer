@@ -8,6 +8,7 @@ class Booking {
     required this.id,
     required this.userId,
     required this.packageId,
+    required this.pax,
     required this.createdAt,
     this.location,
     required this.totalPrice,
@@ -27,6 +28,7 @@ class Booking {
   final String eventTime;
   final DateTime? eventDate;
   final DateTime createdAt;
+  final String pax;
 
   // data hasil join table packages dan bookings
   final Packages? packages;
@@ -52,6 +54,7 @@ class Booking {
           ? Packages.fromJson(json['packages'])
           : null,
       createdAt: DateTime.parse(json['created_at']),
+      pax: json['pax'].toString(),
     );
   }
 }

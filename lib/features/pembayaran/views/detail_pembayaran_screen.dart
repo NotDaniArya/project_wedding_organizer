@@ -92,7 +92,10 @@ class DetailPembayaranScreen extends StatelessWidget {
               const Divider(height: 32),
 
               // --- Detail Reservasi ---
-              _buildDetailRow('Fasilitas', booking.packages?.name ?? 'Paket'),
+              _buildDetailRow(
+                'Fasilitas',
+                '${booking.packages?.name} (${booking.pax}pax)' ?? 'Paket',
+              ),
               _buildDetailRow(
                 'Booking Date',
                 '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} $eventTime', // Asumsi ada eventDate

@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_v/core/models/booking.dart';
 import 'package:project_v/core/services/booking_service.dart';
 
 final bookingServiceProvider = Provider<BookingService>(
@@ -18,6 +19,7 @@ class BookingViewModel extends StateNotifier<bool> {
     required String packageId,
     required DateTime bookingDate,
     required double totalPrice,
+    required String pax,
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) async {
@@ -29,9 +31,29 @@ class BookingViewModel extends StateNotifier<bool> {
             packageId: packageId,
             totalPrice: totalPrice,
             bookingDate: bookingDate,
+            pax: pax,
           );
       onSuccess();
       _ref.refresh(bookingServiceProvider).getMyBookings();
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      state = false;
+    }
+  }
+
+  // METHOD BARU: Untuk membatalkan booking
+  Future<void> cancelBooking({
+    required String bookingId,
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    state = true;
+    try {
+      await _ref.read(bookingServiceProvider).cancelBooking(bookingId);
+      // Refresh daftar booking agar UI terupdate
+      _ref.refresh(bookingServiceProvider);
+      onSuccess();
     } catch (e) {
       onError(e.toString());
     } finally {
@@ -45,3 +67,8 @@ final bookingViewModelProvider = StateNotifierProvider<BookingViewModel, bool>((
 ) {
   return BookingViewModel(ref);
 });
+
+final bookingDetailProvider = FutureProvider.family<Booking, String>(
+  (ref, bookingId) =>
+      ref.watch(bookingServiceProvider).getBookingDetail(bookingId),
+);

@@ -9,6 +9,7 @@ class BookingService {
     required String packageId,
     required double totalPrice,
     required DateTime bookingDate,
+    required String pax,
   }) async {
     try {
       await supabase.from('bookings').insert({
@@ -16,6 +17,7 @@ class BookingService {
         'package_id': packageId,
         'total_price': totalPrice,
         'event_date': bookingDate.toIso8601String(),
+        'pax': int.parse(pax),
       });
     } catch (e) {
       print('Gagal membuat booking: $e');
@@ -63,6 +65,18 @@ class BookingService {
       return Booking.fromJson(res);
     } catch (e) {
       throw Exception('Gagal mengambil data paket: $e');
+    }
+  }
+
+  // untuk membatalkan reservasi
+  Future<void> cancelBooking(String bookingId) async {
+    try {
+      await supabase
+          .from('bookings')
+          .update({'status': 'Dibatalkan'})
+          .eq('id', bookingId);
+    } catch (e) {
+      throw Exception('Gagal membatalkan reservasi: $e');
     }
   }
 }
