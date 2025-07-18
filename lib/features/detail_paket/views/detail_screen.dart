@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
+import 'package:project_v/features/booking/views/opsi_booking_screen.dart';
 
 import '../../../app/utils/constants/colors.dart';
 
@@ -15,7 +18,11 @@ class DetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final packageDetailAsync = ref.watch(packageDetailProvider(packageId));
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: TColors.primaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    );
 
     return Scaffold(
       body: packageDetailAsync.when(
@@ -38,13 +45,13 @@ class DetailScreen extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  background: Image.network(
-                    package.imageUrl,
+                  background: CachedNetworkImage(
+                    imageUrl: package.imageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              // Konten utama halaman
+              // konten utama halaman
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -53,20 +60,32 @@ class DetailScreen extends ConsumerWidget {
                     children: [
                       // Harga
                       Text(
-                        'Harga Paket',
+                        'Daftar harga per-pax',
                         style: textTheme.titleMedium?.copyWith(
                           color: Colors.grey.shade600,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        package.formattedPrice,
-                        style: textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: TColors.primaryColor,
+                      // tampilkan daftar harga perpax
+                      for (final tier in package.pricingTiers)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '> ${tier.pax} Pax',
+                                style: textTheme.bodyLarge,
+                              ),
+                              Text(
+                                '${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(tier.price)} / pax',
+                                style: textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-
                       const Divider(height: 40),
 
                       // Fasilitas
@@ -77,7 +96,7 @@ class DetailScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // Tampilkan setiap fasilitas dalam daftar
+                      // tampilkan setiap fasilitas dalam daftar
                       for (final facility in package.facilities)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
@@ -115,22 +134,36 @@ class DetailScreen extends ConsumerWidget {
         child: const FaIcon(FontAwesomeIcons.whatsapp),
       ),
 
-      // Tombol "Pesan Sekarang" yang menempel di bawah
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            // TODO: Tambahkan navigasi ke halaman form pemesanan
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: TColors.primaryColor,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+        child: packageDetailAsync.when(
+          // Hanya tampilkan tombol jika data sudah ada
+          data: (package) => ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OpsiBookingScreen(package: package),
+                ),
+              );
+            },
+            style: buttonStyle,
+            child: const Text(
+              'Reservasi',
+              style: TextStyle(color: Colors.white),
             ),
           ),
-          child: const Text('Reservasi', style: TextStyle(color: Colors.white)),
+          // Tampilkan tombol nonaktif saat loading atau error
+          loading: () => ElevatedButton(
+            onPressed: null,
+            style: buttonStyle, // Gunakan style yang sama
+            child: const Text('Memuat...'),
+          ),
+          error: (err, stack) => ElevatedButton(
+            onPressed: null,
+            style: buttonStyle, // Gunakan style yang sama
+            child: const Text('Error'),
+          ),
         ),
       ),
     );

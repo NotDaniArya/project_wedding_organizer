@@ -71,14 +71,6 @@ class PackageCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    package.formattedPrice,
-                    style: textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.primary,
-                    ),
-                  ),
                 ],
               ),
             ),

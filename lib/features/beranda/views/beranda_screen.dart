@@ -47,6 +47,7 @@ class BerandaScreen extends ConsumerWidget {
                     'https://ofakmskxtnlzessanyfj.supabase.co/storage/v1/object/public/packages/wo_packages/v-project.png',
                 width: 300,
               ),
+              const SizedBox(height: 30),
             ],
           ),
         ),

@@ -123,16 +123,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         _enteredPass = value!;
                       },
                     ),
-                    const SizedBox(height: TSizes.spaceBtwItems / 4),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                      ),
-                      child: const Text('Forgot Password?'),
-                    ),
-                    const SizedBox(height: TSizes.spaceBtwItems / 4),
+                    const SizedBox(height: TSizes.spaceBtwItems),
                     isLoading
                         ? const CircularProgressIndicator()
                         : MyButton(text: 'Login', onPressed: _submitSignIn),
