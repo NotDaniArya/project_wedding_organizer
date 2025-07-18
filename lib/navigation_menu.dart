@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_v/features/pembayaran/views/pembayaran_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/utils/constants/colors.dart';
@@ -18,13 +19,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   static final List<Widget> _listMenu = [
     const BerandaScreen(),
     Container(),
-    Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.yellow),
-      ),
-    ),
+    const PembayaranScreen(),
     Scaffold(
       body: Container(
         height: double.infinity,

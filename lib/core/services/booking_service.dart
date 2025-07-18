@@ -43,7 +43,7 @@ class BookingService {
     try {
       final res = await supabase
           .from('bookings')
-          .select()
+          .select('*, packages(*)')
           .eq('user_id', user.id)
           .order('created_at', ascending: false);
       return res.map((bookings) => Booking.fromJson(bookings)).toList();

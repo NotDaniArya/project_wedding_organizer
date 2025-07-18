@@ -31,6 +31,7 @@ class BookingViewModel extends StateNotifier<bool> {
             bookingDate: bookingDate,
           );
       onSuccess();
+      _ref.refresh(bookingServiceProvider).getMyBookings();
     } catch (e) {
       onError(e.toString());
     } finally {
