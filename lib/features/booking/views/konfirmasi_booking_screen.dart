@@ -77,7 +77,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 24),
-            // --- Kartu Detail Tagihan ---
+            // kartu detail paket
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -132,8 +132,8 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
               ),
             ),
 
-            const Spacer(), // Mendorong tombol ke bawah
-            // --- Tombol Reservasi Final ---
+            const Spacer(),
+            // button reservasi
             SizedBox(
               width: double.infinity,
               child: isLoading

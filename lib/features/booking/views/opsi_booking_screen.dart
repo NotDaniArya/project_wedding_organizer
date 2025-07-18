@@ -25,12 +25,10 @@ class _OpsiBookingScreenState extends State<OpsiBookingScreen> {
   @override
   void initState() {
     super.initState();
-    // inisialisasi pax count dan harga dengan pax terendah
     if (widget.package.pricingTiers.isNotEmpty) {
       _paxCount = widget.package.pricingTiers.first.pax;
       _calculatedPrice = widget.package.calculateTotalPrice(_paxCount);
     } else {
-      // Fallback jika tidak ada tingkatan harga
       _paxCount = 0;
       _calculatedPrice = 0.0;
     }
@@ -141,7 +139,6 @@ class _OpsiBookingScreenState extends State<OpsiBookingScreen> {
               runSpacing: 8.0,
               children: widget.package.pricingTiers.map((tier) {
                 final isSelected = _paxCount == tier.pax;
-                // Gunakan ChoiceChip untuk tombol pilihan
                 return ChoiceChip(
                   label: Text('>= ${tier.pax} Pax'),
                   selected: isSelected,

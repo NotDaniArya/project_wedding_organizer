@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'app/utils/constants/colors.dart';
 import 'features/beranda/views/beranda_screen.dart';
@@ -16,14 +17,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   // Daftar semua layar yang akan ditampilkan
   static final List<Widget> _listMenu = [
     const BerandaScreen(),
-    // const PaketScreen(),
-    Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.blue),
-      ),
-    ),
+    Container(),
     Scaffold(
       body: Container(
         height: double.infinity,
@@ -40,10 +34,27 @@ class _NavigationMenuState extends State<NavigationMenu> {
     ),
   ];
 
+  Future<void> _launchWhatsApp() async {
+    const phoneNumber = '6282188971812';
+    const url = 'https://wa.me/$phoneNumber';
+
+    if (!await launchUrl(Uri.parse(url))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak dapat membuka WhatsApp.')),
+      );
+    }
+  }
+
   void _onSelectedMenu(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    // cek kalau tombol yang ditekan adalah 'Chat Admin'
+    if (index == 1) {
+      _launchWhatsApp();
+    } else {
+      // kalau bukan, ganti layar seperti biasa
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
