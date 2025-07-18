@@ -20,13 +20,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     const BerandaScreen(),
     Container(),
     const PembayaranScreen(),
-    Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.orange),
-      ),
-    ),
+    Container(),
   ];
 
   Future<void> _launchWhatsApp() async {
@@ -40,10 +34,21 @@ class _NavigationMenuState extends State<NavigationMenu> {
     }
   }
 
+  Future<void> _showCalendar() async {
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 730)),
+    );
+  }
+
   void _onSelectedMenu(int index) {
     // cek kalau tombol yang ditekan adalah 'Chat Admin'
     if (index == 1) {
       _launchWhatsApp();
+    } else if (index == 3) {
+      _showCalendar();
     } else {
       // kalau bukan, ganti layar seperti biasa
       setState(() {
