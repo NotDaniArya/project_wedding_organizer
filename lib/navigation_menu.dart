@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_v/features/paket/views/paket_screen.dart';
 import 'package:project_v/features/profile/views/profile_screen.dart';
+import 'package:project_v/features/reservasiku/views/reservasiku_screen.dart';
 
 import 'app/utils/constants/colors.dart';
 import 'features/beranda/views/beranda_screen.dart';
@@ -19,13 +20,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   static final List<Widget> _listMenu = [
     const BerandaScreen(),
     const PaketScreen(),
-    Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.blue),
-      ),
-    ),
+    const ReservasikuScreen(),
     const ProfileScreen(),
   ];
 

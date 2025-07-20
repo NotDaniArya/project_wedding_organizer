@@ -25,21 +25,20 @@ class Booking {
   final String? notes;
   final String status;
   final String? paymentProofUrl;
-  // data hasil join table packages dan bookings
   final Packages? packages;
 
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
       id: json['id'],
-      createdAt: DateTime.parse(json['createdAt']),
-      userId: json['userId'],
-      packageId: json['packageId'],
-      bookingDate: DateTime.parse(json['bookingDate']),
-      totalPrice: json['totalPrice'],
+      createdAt: DateTime.parse(json['created_at']),
+      userId: json['user_id'],
+      packageId: json['package_id'],
+      bookingDate: DateTime.parse(json['booking_date']),
+      totalPrice: json['total_price'],
       location: json['location'],
       status: json['status'],
       notes: json['notes'],
-      paymentProofUrl: json['payment_proof_url'],
+      paymentProofUrl: json['payment_proof_url'] ?? 'Belum dibayar',
       packages: json['packages'] != null
           ? Packages.fromJson(json['packages'])
           : null,

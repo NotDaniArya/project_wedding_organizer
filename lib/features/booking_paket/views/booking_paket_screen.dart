@@ -5,6 +5,7 @@ import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/sizes.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
 import 'package:project_v/features/booking_paket/viewmodels/booking_paket_viewmodel.dart';
+import 'package:project_v/features/reservasiku/viewmodels/reservasiku_viewmodel.dart';
 import 'package:project_v/navigation_menu.dart';
 
 import '../../../app/utils/helper_function/my_helper_function.dart';
@@ -72,6 +73,7 @@ class _BookingPaketScreenState extends ConsumerState<BookingPaketScreen> {
                 ],
               ),
             );
+            ref.refresh(getMyReservasikuProvider);
           },
           onError: (error) =>
               MyHelperFunction.toastNotification(error, false, context),
@@ -314,18 +316,18 @@ class _BookingPaketScreenState extends ConsumerState<BookingPaketScreen> {
                       const SizedBox(height: TSizes.spaceBtwItems),
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: TColors.primaryColor,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: (_selectedDate == null)
-                              ? null
-                              : submitBooking,
-                          child: isLoading
-                              ? const Center(child: CircularProgressIndicator())
-                              : const Text('Reservasi'),
-                        ),
+                        child: isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: TColors.primaryColor,
+                                  foregroundColor: Colors.white,
+                                ),
+                                onPressed: (_selectedDate == null)
+                                    ? null
+                                    : submitBooking,
+                                child: const Text('Reservasi'),
+                              ),
                       ),
                     ],
                   ),

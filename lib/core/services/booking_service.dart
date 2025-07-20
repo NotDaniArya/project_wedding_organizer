@@ -50,10 +50,14 @@ class BookingService {
     try {
       final res = await supabase
           .from('bookings')
-          .select()
+          .select('*, packages(*)')
           .eq('user_id', user.id)
           .order('created_at', ascending: false);
-      return res.map((bookings) => Booking.fromJson(bookings)).toList();
+
+      final myBookings = res
+          .map((bookings) => Booking.fromJson(bookings))
+          .toList();
+      return myBookings;
     } catch (e) {
       throw Exception('Gagal mengambil data reservasi: $e');
     }
@@ -63,7 +67,7 @@ class BookingService {
     try {
       final res = await supabase
           .from('bookings')
-          .select()
+          .select('*, packages(*)')
           .eq('id', bookingId)
           .single();
 
