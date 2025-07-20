@@ -65,8 +65,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/logo.png',
-                width: 150,
+                'assets/images/logo_aplikasi.png',
+                width: 100,
                 fit: BoxFit.cover,
               ),
               const SizedBox(height: TSizes.spaceBtwItems),

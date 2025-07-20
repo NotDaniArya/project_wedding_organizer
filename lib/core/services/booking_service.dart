@@ -19,7 +19,7 @@ class BookingService {
       await supabase.from('bookings').insert({
         'user_id': user.id,
         'package_id': packageId,
-        'booking_date': bookingDate,
+        'booking_date': bookingDate.toIso8601String(),
         'total_price': totalPrice,
         'location': location,
         'notes': notes,

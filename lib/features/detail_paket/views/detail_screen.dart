@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
+import 'package:project_v/features/booking_paket/views/booking_paket_screen.dart';
 
 import '../../../app/utils/constants/colors.dart';
 
@@ -41,12 +43,22 @@ class DetailScreen extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  background: Image.network(
-                    package.imageUrl,
+                  background: CachedNetworkImage(
+                    imageUrl: package.imageUrl,
                     fit: BoxFit.cover,
+                    width: double.infinity,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
+                        ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
               ),
+
               // Konten utama halaman
               SliverToBoxAdapter(
                 child: Padding(
@@ -181,7 +193,12 @@ class DetailScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // TODO: Tambahkan navigasi ke halaman form pemesanan
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookingPaketScreen(packageId: packageId),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: TColors.primaryColor,
@@ -192,7 +209,7 @@ class DetailScreen extends ConsumerWidget {
             ),
           ),
           child: const Text(
-            'Pesan Sekarang',
+            'Reservasi Sekarang',
             style: TextStyle(color: Colors.white),
           ),
         ),

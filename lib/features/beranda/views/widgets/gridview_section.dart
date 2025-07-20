@@ -53,7 +53,11 @@ class GridviewSection extends StatelessWidget {
               );
             },
             error: (err, stack) => Center(child: Text('Error: $err')),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => Container(
+              width: double.infinity,
+              height: 350,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
           ),
         ],
       ),
