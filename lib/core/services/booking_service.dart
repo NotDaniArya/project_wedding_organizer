@@ -79,31 +79,41 @@ class BookingService {
 
   Future<void> uploadBookingProof({
     required String bookingId,
-    required File proofFile,
+    required File? proofFile,
   }) async {
     try {
-      final fileExt = proofFile.path.split('.').last;
-      final fileName = '${user.id}/$bookingId.$fileExt}';
+      String? finalFileName;
+      if (proofFile != null) {
+        final fileExt = proofFile.path.split('.').last;
+        final fileName = '${user.id}/$bookingId.$fileExt';
 
-      await supabase.storage
-          .from('user-payment')
-          .upload(
-            fileName,
-            proofFile,
-            fileOptions: const FileOptions(upsert: true),
-          );
+        await supabase.storage
+            .from('user-payment')
+            .upload(
+              fileName,
+              proofFile,
+              fileOptions: const FileOptions(
+                cacheControl: '3600',
+                upsert: true,
+              ),
+            );
 
-      final imageUrl = supabase.storage
-          .from('user-payment')
-          .getPublicUrl(fileName);
+        final imageUrl = supabase.storage
+            .from('user-payment')
+            .getPublicUrl(fileName);
 
-      await supabase
-          .from('bookings')
-          .update({
-            'payment_proof_url': imageUrl,
-            'status': 'Menunggu Verifikasi',
-          })
-          .eq('id', bookingId);
+        finalFileName = '$imageUrl?t=${DateTime.now().millisecondsSinceEpoch}';
+      }
+
+      if (finalFileName != null) {
+        await supabase
+            .from('bookings')
+            .update({
+              'payment_proof_url': finalFileName,
+              'status': 'Menunggu Verifikasi Pembayaran',
+            })
+            .eq('id', bookingId);
+      }
     } catch (e) {
       throw Exception('Gagal mengupload bukti pembayaran: $e');
     }
