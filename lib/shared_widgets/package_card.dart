@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
 
 import '../core/models/packages.dart';
-import '../features/detail_paket/views/detail_screen.dart';
+import '../features/user/detail_paket/views/detail_screen.dart';
 
 class PackageCard extends StatelessWidget {
   const PackageCard({super.key, required this.package});

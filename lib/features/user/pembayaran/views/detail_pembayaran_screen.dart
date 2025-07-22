@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/models/booking.dart';
+import '../../../../core/models/booking.dart';
 
 class DetailPembayaranScreen extends StatelessWidget {
   const DetailPembayaranScreen({super.key, required this.booking});

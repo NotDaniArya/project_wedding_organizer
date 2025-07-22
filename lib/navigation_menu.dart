@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_v/features/pembayaran/views/pembayaran_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/utils/constants/colors.dart';
-import 'features/beranda/views/beranda_screen.dart';
+import 'features/user/beranda/views/beranda_screen.dart';
+import 'features/user/pembayaran/views/pembayaran_screen.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});

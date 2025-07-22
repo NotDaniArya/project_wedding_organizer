@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
-import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
-import 'package:project_v/features/booking/views/opsi_booking_screen.dart';
 
-import '../../../app/utils/constants/colors.dart';
+import '../../../../app/utils/constants/colors.dart';
+import '../../beranda/viewmodels/packages_viewmodel.dart';
+import '../../booking/views/opsi_booking_screen.dart';
 
 class DetailScreen extends ConsumerWidget {
   const DetailScreen({super.key, required this.packageId});

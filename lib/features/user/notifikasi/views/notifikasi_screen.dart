@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/core/models/booking.dart'; // Import model
-import 'package:project_v/features/booking/viewmodels/booking_viewmodels.dart';
+
+import '../../booking/viewmodels/booking_viewmodels.dart';
 
 class NotifikasiScreen extends ConsumerWidget {
   const NotifikasiScreen({super.key, required this.bookingId});

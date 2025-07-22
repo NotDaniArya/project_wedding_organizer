@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
-import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
-import 'package:project_v/features/auth/views/login_screen.dart';
 import 'package:project_v/shared_widgets/button.dart';
 import 'package:project_v/shared_widgets/input_text_field.dart';
 import 'package:project_v/shared_widgets/text_button.dart';
 
-import '../../../app/utils/constants/sizes.dart';
+import '../../../../app/utils/constants/sizes.dart';
+import '../viewmodels/auth_viewmodel.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});

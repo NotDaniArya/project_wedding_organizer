@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/models/packages.dart';
-import '../../../core/services/packages_service.dart';
+import '../../../../core/models/packages.dart';
+import '../../../../core/services/packages_service.dart';
 
 /*
 ======= provider untuk package service =======

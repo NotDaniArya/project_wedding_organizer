@@ -2,12 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_v/app/utils/constants/sizes.dart';
-import 'package:project_v/features/auth/viewmodels/auth_viewmodel.dart';
-import 'package:project_v/features/auth/views/login_screen.dart';
-import 'package:project_v/features/beranda/viewmodels/packages_viewmodel.dart';
-import 'package:project_v/features/beranda/views/widgets/gridview_section.dart';
-import 'package:project_v/features/notifikasi/views/notifikasi_screen.dart';
-import 'package:project_v/features/pembayaran/viewmodels/pembayaran_viewmodel.dart';
+import 'package:project_v/features/user/beranda/views/widgets/gridview_section.dart';
+
+import '../../auth/viewmodels/auth_viewmodel.dart';
+import '../../auth/views/login_screen.dart';
+import '../../notifikasi/views/notifikasi_screen.dart';
+import '../../pembayaran/viewmodels/pembayaran_viewmodel.dart';
+import '../viewmodels/packages_viewmodel.dart';
 
 class BerandaScreen extends ConsumerWidget {
   const BerandaScreen({super.key});

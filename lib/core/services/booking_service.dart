@@ -1,8 +1,26 @@
 import 'package:project_v/core/models/booking.dart';
 import 'package:project_v/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+enum Status {
+  menungguKonfirmasi('Menunggu Konfirmasi'),
+  lunas('Lunas'),
+  selesai('Selesai'),
+  dibatalkan('Dibatalkan');
+
+  const Status(this.value);
+
+  final String value;
+}
 
 class BookingService {
   final user = supabase.auth.currentUser!;
+
+  /*
+  =================================
+          FITUR UNTUK USER
+  =================================
+   */
 
   // fungsi untuk buat booking baru
   Future<void> createBooking({
@@ -79,4 +97,55 @@ class BookingService {
       throw Exception('Gagal membatalkan reservasi: $e');
     }
   }
+
+  /*
+  =================================
+        FITUR UNTUK USER END
+  =================================
+   */
+
+  /*
+  =================================
+          FITUR UNTUK ADMIN
+  =================================
+   */
+
+  // fungsi untuk ambil semua booking user dan juga filter berdasarkan status
+  Future<List<Booking>> getAllUsersBookings(Status? status) async {
+    try {
+      var query = supabase.from('bookings').select('*, packages(*)');
+
+      if (status != null) {
+        query = query.eq('status', status.value);
+      }
+
+      final res = await query.order('created_at', ascending: true);
+
+      return res.map((bookings) => Booking.fromJson(bookings)).toList();
+    } catch (e) {
+      throw Exception('Gagal mengambil semua daftar booking users: $e');
+    }
+  }
+
+  // function untuk menghitung total reservasi, reservasi yang menunggu konfirmasi
+  Future<int> countAllBookings(Status? status) async {
+    try {
+      var query = supabase.from('bookings').select('id');
+
+      if (status != null) {
+        query = query.eq('status', status.value);
+      }
+
+      final res = await query.count(CountOption.exact);
+      return res.count;
+    } catch (e) {
+      throw Exception('Gagal menghitung reservasi: $e');
+    }
+  }
+
+  /*
+  =================================
+       FITUR UNTUK ADMIN END
+  ================================= 
+   */
 }

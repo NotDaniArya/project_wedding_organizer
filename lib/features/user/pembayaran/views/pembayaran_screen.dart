@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:project_v/features/pembayaran/viewmodels/pembayaran_viewmodel.dart';
 
+import '../viewmodels/pembayaran_viewmodel.dart';
 import 'detail_pembayaran_screen.dart';
 
 class PembayaranScreen extends ConsumerWidget {
