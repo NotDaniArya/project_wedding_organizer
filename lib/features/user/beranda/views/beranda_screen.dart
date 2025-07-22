@@ -72,9 +72,11 @@ class BerandaScreen extends ConsumerWidget {
           IconButton(
             onPressed: () async {
               await ref.read(authViewModelProvider.notifier).signOut();
-              Navigator.pushReplacement(
+
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
               );
             },
             icon: const Icon(Icons.logout),

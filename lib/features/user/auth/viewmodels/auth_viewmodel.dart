@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_v/features/user/booking/viewmodels/booking_viewmodels.dart';
 
 import '../../../../core/services/auth_service.dart';
+import '../../beranda/viewmodels/profile_viewmodel.dart';
+import '../../pembayaran/viewmodels/pembayaran_viewmodel.dart';
 
 // Provider untuk AuthService
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
@@ -61,7 +64,14 @@ class AuthViewModel extends StateNotifier<bool> {
   // function untuk logout
   Future<void> signOut() async {
     state = true; // set loading menjadi true
-    await _ref.read(authServiceProvider).signOut();
+    try {
+      await _ref.read(authServiceProvider).signOut();
+      _ref.invalidate(profileProvider);
+      _ref.invalidate(pembayaranViewModelProvider);
+      _ref.invalidate(bookingViewModelProvider);
+    } catch (e) {
+      throw Exception('error saat logout: $e');
+    }
     state = false; // Set loading menjadi false
   }
 }

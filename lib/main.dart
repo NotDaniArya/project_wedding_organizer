@@ -5,8 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/constants/text_strings.dart';
-import 'package:project_v/features/auth/views/login_screen.dart';
-import 'package:project_v/navigation_menu.dart';
+import 'package:project_v/auth_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final theme = ThemeData().copyWith(
@@ -34,37 +33,16 @@ Future<void> main() async {
 // instance Supabase client supaya bisa diakses dimana saja
 final supabase = Supabase.instance.client;
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Wedding Organizer app',
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: StreamBuilder(
-        stream: supabase.auth.onAuthStateChange,
-        builder: (context, snapshot) {
-          // Selama proses inisialisasi session, tampilkan loading
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-
-          // Setelah proses selesai, periksa apakah ada session
-          final session = snapshot.data?.session;
-
-          if (session != null) {
-            // Jika ada session, pengguna sudah login -> tampilkan HomeScreen
-            return const NavigationMenu();
-          } else {
-            // Jika tidak ada session, pengguna belum login -> tampilkan LoginScreen
-            return const LoginScreen();
-          }
-        },
-      ),
+      home: const AuthGate(),
     );
   }
 }
