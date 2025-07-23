@@ -38,7 +38,7 @@ class Booking {
       id: json['id'],
       userId: json['user_id'],
       packageId: json['package_id'],
-      totalPrice: json['total_price'],
+      totalPrice: (json['total_price'] as num).toDouble(),
       location: json['location'],
       status: json['status'],
       totalCrew: json['total_crew'],

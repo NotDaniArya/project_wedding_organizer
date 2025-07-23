@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_v/main.dart';
+import 'package:project_v/features/admin/dashboard/views/dashboard_screen.dart';
+import 'package:project_v/features/admin/reservasi/views/list_reservasi_user_screen.dart';
 
 import '../../app/utils/constants/colors.dart';
 
@@ -15,16 +16,8 @@ class _AdminNavigationMenuState extends State<AdminNavigationMenu> {
 
   // Daftar semua layar yang akan ditampilkan
   static final List<Widget> _listMenu = [
-    Container(
-      height: double.infinity,
-      width: double.infinity,
-      decoration: const BoxDecoration(color: Colors.lime),
-    ),
-    Container(
-      height: double.infinity,
-      width: double.infinity,
-      decoration: const BoxDecoration(color: Colors.redAccent),
-    ),
+    const DashboardScreen(),
+    const ListReservasiUserScreen(),
   ];
 
   void _onSelectedMenu(int index) {
@@ -36,16 +29,6 @@ class _AdminNavigationMenuState extends State<AdminNavigationMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await supabase.auth.signOut();
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
       // Tampilkan layar yang sesuai dengan indeks yang dipilih
       body: _listMenu.elementAt(_selectedIndex),
 

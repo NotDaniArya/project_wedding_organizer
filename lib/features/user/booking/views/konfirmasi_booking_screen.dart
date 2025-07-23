@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/constants/colors.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
+import 'package:project_v/features/user/pembayaran/viewmodels/pembayaran_viewmodel.dart';
 import 'package:project_v/navigation_menu.dart';
 
 import '../../../../core/models/packages.dart';
@@ -50,6 +51,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     TextButton(
                       child: const Text('OK'),
                       onPressed: () {
+                        ref.refresh(pembayaranViewModelProvider);
                         Navigator.of(dialogContext).pop();
                         Navigator.pushAndRemoveUntil(
                           context,
