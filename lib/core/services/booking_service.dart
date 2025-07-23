@@ -1,4 +1,5 @@
 import 'package:project_v/core/models/booking.dart';
+import 'package:project_v/core/models/dashboard_stats.dart';
 import 'package:project_v/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -45,15 +46,23 @@ class BookingService {
   // fungsi untuk mendapatkan semua tanggal yang sudah dibooking
   Future<List<DateTime>> getBookedDates() async {
     try {
-      final response = await supabase
-          .from('bookings')
-          .select('booking_date')
-          .inFilter('status', ['Menunggu Pembayaran', 'Lunas', 'Selesai']);
+      final List<Future<dynamic>> futures = [
+        supabase.from('bookings').select('event_date').inFilter('status', [
+          'Menunggu Konfirmasi',
+          'Lunas',
+        ]),
+        getManuallyBlockedDates(),
+      ];
 
-      final dates = (response as List)
-          .map((item) => DateTime.parse(item['booking_date'] as String))
-          .toList();
-      return dates;
+      final results = await Future.wait(futures);
+
+      final bookedDates = (results[0] as List).map(
+        (item) => DateTime.parse(item['event_date'] as String),
+      );
+
+      final manuallyBlockedDates = results[1] as List<DateTime>;
+
+      return [...bookedDates, ...manuallyBlockedDates];
     } catch (e) {
       throw Exception('Gagal mengambil jadwal: $e');
     }
@@ -140,6 +149,67 @@ class BookingService {
       return res.count;
     } catch (e) {
       throw Exception('Gagal menghitung reservasi: $e');
+    }
+  }
+
+  // function untuk statistik dashboard
+  Future<DashboardStats> getDashboardStats() async {
+    try {
+      final results = await Future.wait([
+        countAllBookings(null),
+        countAllBookings(Status.menungguKonfirmasi),
+      ]);
+
+      return DashboardStats(
+        totalBookings: results[0],
+        pendingBokings: results[1],
+      );
+    } catch (e) {
+      throw Exception('Gagal mengambil statistik dashboard: $e');
+    }
+  }
+
+  // fungsi untuk get tanggal yang diblokir oleh admin
+  Future<List<DateTime>> getManuallyBlockedDates() async {
+    try {
+      final res = await supabase
+          .from('unavailable_dates')
+          .select('unavailable_date');
+
+      return (res as List)
+          .map((item) => DateTime.parse(item['unavailable_date'] as String))
+          .toList();
+    } catch (e) {
+      throw Exception('Gagal mengambil tanggal yang diblokir: $e');
+    }
+  }
+
+  // fungsi untuk block tanggal
+  Future<void> addBlockedDate(DateTime date) async {
+    final user = supabase.auth.currentUser;
+    if (user == null) throw Exception('Admin tidak login.');
+    try {
+      await supabase.from('unavailable_dates').insert({
+        'unavailable_date': date.toIso8601String().substring(
+          0,
+          10,
+        ), // Format YYYY-MM-DD
+        'admin_id': user.id,
+      });
+    } catch (e) {
+      throw Exception('Gagal memblokir tanggal: $e');
+    }
+  }
+
+  // fungsi untuk hapus blokir tanggal
+  Future<void> removeBlockedDate(DateTime date) async {
+    try {
+      await supabase
+          .from('unavailable_dates')
+          .delete()
+          .eq('unavailable_date', date.toIso8601String().substring(0, 10));
+    } catch (e) {
+      throw Exception('Gagal membuka tanggal: $e');
     }
   }
 

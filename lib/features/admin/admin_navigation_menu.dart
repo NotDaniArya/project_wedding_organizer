@@ -3,6 +3,7 @@ import 'package:project_v/features/admin/dashboard/views/dashboard_screen.dart';
 import 'package:project_v/features/admin/reservasi/views/list_reservasi_user_screen.dart';
 
 import '../../app/utils/constants/colors.dart';
+import 'jadwal/views/jadwal_screen.dart';
 
 class AdminNavigationMenu extends StatefulWidget {
   const AdminNavigationMenu({super.key});
@@ -18,6 +19,7 @@ class _AdminNavigationMenuState extends State<AdminNavigationMenu> {
   static final List<Widget> _listMenu = [
     const DashboardScreen(),
     const ListReservasiUserScreen(),
+    const JadwalScreen(),
   ];
 
   void _onSelectedMenu(int index) {
@@ -43,6 +45,11 @@ class _AdminNavigationMenuState extends State<AdminNavigationMenu> {
             icon: Icon(Icons.list_alt_outlined),
             activeIcon: Icon(Icons.list_alt),
             label: 'Reservasi',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_available_outlined),
+            activeIcon: Icon(Icons.event_available),
+            label: 'Jadwal', // Menu baru
           ),
         ],
         currentIndex: _selectedIndex,
