@@ -6,8 +6,8 @@ import 'package:project_v/core/models/booking.dart'; // Import model
 
 import '../../booking/viewmodels/booking_viewmodels.dart';
 
-class NotifikasiScreen extends ConsumerWidget {
-  const NotifikasiScreen({super.key, required this.bookingId});
+class DetailNotifikasiScreen extends ConsumerWidget {
+  const DetailNotifikasiScreen({super.key, required this.bookingId});
 
   final String bookingId;
 
@@ -136,74 +136,75 @@ class NotifikasiScreen extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: isLoading
-                ? null
-                : () {
-                    // BEST PRACTICE: Tampilkan dialog konfirmasi sebelum cancel
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('Konfirmasi Pembatalan'),
-                        content: const Text(
-                          'Apakah Anda yakin ingin membatalkan reservasi ini?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('Tidak'),
+        if (booking.status != 'Lunas')
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      // BEST PRACTICE: Tampilkan dialog konfirmasi sebelum cancel
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Konfirmasi Pembatalan'),
+                          content: const Text(
+                            'Apakah Anda yakin ingin membatalkan reservasi ini?',
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(ctx).pop(); // Tutup dialog dulu
-                              ref
-                                  .read(bookingViewModelProvider.notifier)
-                                  .cancelBooking(
-                                    bookingId: booking.id,
-                                    onSuccess: () {
-                                      Navigator.of(
-                                        context,
-                                      ).pop(); // Kembali ke halaman sebelumnya
-                                      MyHelperFunction.toastNotification(
-                                        'Reservasi berhasil dibatalkan.',
-                                        true,
-                                        context,
-                                      );
-                                    },
-                                    onError: (error) {
-                                      MyHelperFunction.toastNotification(
-                                        error,
-                                        false,
-                                        context,
-                                      );
-                                    },
-                                  );
-                            },
-                            child: const Text(
-                              'Ya, Batalkan',
-                              style: TextStyle(color: Colors.red),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: const Text('Tidak'),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.shade100,
-              foregroundColor: Colors.red.shade800,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(); // Tutup dialog dulu
+                                ref
+                                    .read(bookingViewModelProvider.notifier)
+                                    .cancelBooking(
+                                      bookingId: booking.id,
+                                      onSuccess: () {
+                                        Navigator.of(
+                                          context,
+                                        ).pop(); // Kembali ke halaman sebelumnya
+                                        MyHelperFunction.toastNotification(
+                                          'Reservasi berhasil dibatalkan.',
+                                          true,
+                                          context,
+                                        );
+                                      },
+                                      onError: (error) {
+                                        MyHelperFunction.toastNotification(
+                                          error,
+                                          false,
+                                          context,
+                                        );
+                                      },
+                                    );
+                              },
+                              child: const Text(
+                                'Ya, Batalkan',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade100,
+                foregroundColor: Colors.red.shade800,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('CANCEL RESERVATION'),
             ),
-            child: isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text('CANCEL RESERVATION'),
           ),
-        ),
       ],
     );
   }

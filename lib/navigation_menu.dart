@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_v/features/user/tanggal_tersedia/views/tanggal_tersedia_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/utils/constants/colors.dart';
@@ -20,7 +21,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     const BerandaScreen(),
     Container(),
     const PembayaranScreen(),
-    Container(),
+    const TanggalTersediaScreen(),
   ];
 
   Future<void> _launchWhatsApp() async {
@@ -47,8 +48,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
     // cek kalau tombol yang ditekan adalah 'Chat Admin'
     if (index == 1) {
       _launchWhatsApp();
-    } else if (index == 3) {
-      _showCalendar();
     } else {
       // kalau bukan, ganti layar seperti biasa
       setState(() {

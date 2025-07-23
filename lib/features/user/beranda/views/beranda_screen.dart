@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project_v/app/utils/constants/sizes.dart';
 import 'package:project_v/features/user/beranda/views/widgets/gridview_section.dart';
+import 'package:project_v/features/user/notifikasi/views/list_notifikasi_screen.dart';
 
 import '../../auth/viewmodels/auth_viewmodel.dart';
 import '../../auth/views/login_screen.dart';
-import '../../notifikasi/views/notifikasi_screen.dart';
 import '../../pembayaran/viewmodels/pembayaran_viewmodel.dart';
 import '../viewmodels/packages_viewmodel.dart';
 
@@ -52,8 +52,7 @@ class BerandaScreen extends ConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                NotifikasiScreen(bookingId: latestBookingId),
+                            builder: (context) => const ListNotifikasiScreen(),
                           ),
                         );
                       }

@@ -42,8 +42,8 @@ class Booking {
       location: json['location'],
       status: json['status'],
       totalCrew: json['total_crew'],
-      technicalMeetingDate: json['technical_meeting_date'] != null
-          ? DateTime.parse(json['technical_meeting_date'])
+      technicalMeetingDate: json['technical_meeting_datetime'] != null
+          ? DateTime.parse(json['technical_meeting_datetime'])
           : null,
       eventTime: json['event_time'],
 
