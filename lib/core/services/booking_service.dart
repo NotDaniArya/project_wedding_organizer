@@ -38,6 +38,11 @@ class BookingService {
         'event_date': bookingDate.toIso8601String(),
         'pax': int.parse(pax),
       });
+
+      await supabase.from('unavailable_dates').insert({
+        'user_id': user.id,
+        'unavailable_date': bookingDate.toIso8601String().substring(0, 10),
+      });
     } catch (e) {
       print('Gagal membuat booking: $e');
     }
@@ -194,7 +199,7 @@ class BookingService {
           0,
           10,
         ), // Format YYYY-MM-DD
-        'admin_id': user.id,
+        'user_id': user.id,
       });
     } catch (e) {
       throw Exception('Gagal memblokir tanggal: $e');
@@ -210,6 +215,28 @@ class BookingService {
           .eq('unavailable_date', date.toIso8601String().substring(0, 10));
     } catch (e) {
       throw Exception('Gagal membuka tanggal: $e');
+    }
+  }
+
+  Future<void> approveBooking({
+    required String bookingId,
+    required int totalCrew,
+    required DateTime technicalMeetingDate,
+    required String location,
+  }) async {
+    try {
+      await supabase
+          .from('bookings')
+          .update({
+            'total_crew': totalCrew,
+            'technical_meeting_datetime': technicalMeetingDate
+                .toIso8601String(),
+            'location': location,
+            'status': Status.lunas.value,
+          })
+          .eq('id', bookingId);
+    } catch (e) {
+      throw Exception('Gagal terima reservasi user: $e');
     }
   }
 

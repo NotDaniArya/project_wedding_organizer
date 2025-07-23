@@ -29,7 +29,6 @@ class JadwalScreen extends ConsumerWidget {
                   lastDay: DateTime.utc(2030, 12, 31),
                   focusedDay: DateTime.now(),
                   calendarBuilders: CalendarBuilders(
-                    // Tandai tanggal yang diblokir
                     defaultBuilder: (context, day, focusedDay) {
                       final isBlocked = blockedDates.any(
                         (d) => isSameDay(d, day),
