@@ -61,6 +61,25 @@ class BookingViewModel extends StateNotifier<bool> {
       state = false;
     }
   }
+
+  Future<void> payBooking({
+    required String bookingId,
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    state = true;
+    try {
+      await _ref.read(bookingServiceProvider).payBooking(bookingId: bookingId);
+      // Refresh daftar booking agar UI terupdate
+      _ref.invalidate(pembayaranViewModelProvider);
+      _ref.refresh(bookingServiceProvider).getMyBookings();
+      onSuccess();
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      state = false;
+    }
+  }
 }
 
 final bookingViewModelProvider = StateNotifierProvider<BookingViewModel, bool>((

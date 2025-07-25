@@ -11,6 +11,25 @@ class ReservasiViewModel extends StateNotifier<bool> {
 
   Future<void> approveBooking({
     required String bookingId,
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    state = true;
+    try {
+      await ref
+          .read(bookingServiceProvider)
+          .approveBooking(bookingId: bookingId);
+      ref.invalidate(getAllUsersBookings);
+      ref.invalidate(bookingDetailProvider(bookingId));
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      state = false;
+    }
+  }
+
+  Future<void> finalize({
+    required String bookingId,
     required int totalCrew,
     required DateTime technicalMeetingDate,
     required String location,
@@ -21,7 +40,7 @@ class ReservasiViewModel extends StateNotifier<bool> {
     try {
       await ref
           .read(bookingServiceProvider)
-          .approveBooking(
+          .finalizeBooking(
             bookingId: bookingId,
             totalCrew: totalCrew,
             technicalMeetingDate: technicalMeetingDate,

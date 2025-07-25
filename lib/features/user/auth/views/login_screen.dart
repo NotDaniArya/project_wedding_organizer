@@ -65,13 +65,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'LOGIN\n V PROJECT WO',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Image.asset('assets/images/logo.png', height: 120),
               const SizedBox(height: 20),
               Form(
                 key: _form,

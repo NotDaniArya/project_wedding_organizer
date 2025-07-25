@@ -149,7 +149,7 @@ class DetailScreen extends ConsumerWidget {
             },
             style: buttonStyle,
             child: const Text(
-              'Reservasi',
+              'Booking Paket',
               style: TextStyle(color: Colors.white),
             ),
           ),

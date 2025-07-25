@@ -5,9 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 enum Status {
   menungguKonfirmasi('Menunggu Konfirmasi'),
-  lunas('Lunas'),
-  selesai('Selesai'),
-  dibatalkan('Dibatalkan');
+  menungguDP('Menunggu DP'),
+  sudahDP('Sudah DP');
 
   const Status(this.value);
 
@@ -90,7 +89,7 @@ class BookingService {
     try {
       final res = await supabase
           .from('bookings')
-          .select()
+          .select('*, packages(*), profiles(*)')
           .eq('id', bookingId)
           .single();
 
@@ -109,6 +108,17 @@ class BookingService {
           .eq('id', bookingId);
     } catch (e) {
       throw Exception('Gagal membatalkan reservasi: $e');
+    }
+  }
+
+  Future<void> payBooking({required String bookingId}) async {
+    try {
+      await supabase
+          .from('bookings')
+          .update({'status': Status.sudahDP.value})
+          .eq('id', bookingId);
+    } catch (e) {
+      print('Gagal dp booking: $e');
     }
   }
 
@@ -133,7 +143,7 @@ class BookingService {
         query = query.eq('status', status.value);
       }
 
-      final res = await query.order('created_at', ascending: true);
+      final res = await query.order('created_at', ascending: false);
 
       return res.map((bookings) => Booking.fromJson(bookings)).toList();
     } catch (e) {
@@ -218,7 +228,18 @@ class BookingService {
     }
   }
 
-  Future<void> approveBooking({
+  Future<void> approveBooking({required String bookingId}) async {
+    try {
+      await supabase
+          .from('bookings')
+          .update({'status': Status.menungguDP.value})
+          .eq('id', bookingId);
+    } catch (e) {
+      throw Exception('Gagal terima reservasi user: $e');
+    }
+  }
+
+  Future<void> finalizeBooking({
     required String bookingId,
     required int totalCrew,
     required DateTime technicalMeetingDate,
@@ -232,7 +253,7 @@ class BookingService {
             'technical_meeting_datetime': technicalMeetingDate
                 .toIso8601String(),
             'location': location,
-            'status': Status.lunas.value,
+            'status': Status.sudahDP.value,
           })
           .eq('id', bookingId);
     } catch (e) {

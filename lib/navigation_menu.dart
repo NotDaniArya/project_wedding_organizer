@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_v/features/user/reservasiku/views/list_reservasiku_screen.dart';
 import 'package:project_v/features/user/tanggal_tersedia/views/tanggal_tersedia_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,6 +21,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   static final List<Widget> _listMenu = [
     const BerandaScreen(),
     Container(),
+    const ListReservasikuScreen(),
     const PembayaranScreen(),
     const TanggalTersediaScreen(),
   ];
@@ -75,6 +77,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
             label: 'Chat Admin',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.my_library_books_outlined),
+            activeIcon: Icon(Icons.my_library_books_sharp),
+            label: 'Reservasiku',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.attach_money_outlined),
             activeIcon: Icon(Icons.attach_money_outlined),
             label: 'Pembayaran',
@@ -89,7 +96,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         onTap: _onSelectedMenu,
         selectedItemColor: TColors.primaryColor,
         unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
+        showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
       ),
     );

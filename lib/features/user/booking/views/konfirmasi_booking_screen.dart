@@ -108,7 +108,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     style: textTheme.bodyMedium,
                   ),
                   Text(
-                    'Hari: ${DateFormat('dd/MM/yyyy').format(selectedDate)} $_time',
+                    'Hari: ${DateFormat('d-MMMM-yyyy').format(selectedDate)} $_time',
                     style: textTheme.bodyMedium,
                   ),
                   Text(
@@ -116,26 +116,15 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     style: textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        NumberFormat.currency(
-                          locale: 'id_ID',
-                          symbol: 'IDR: ',
-                          decimalDigits: 0,
-                        ).format(totalPrice),
-                        style: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_forward_ios),
-                      ),
-                    ],
+                  Text(
+                    NumberFormat.currency(
+                      locale: 'id_ID',
+                      symbol: 'IDR: ',
+                      decimalDigits: 0,
+                    ).format(totalPrice),
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

@@ -120,14 +120,14 @@ class _OpsiBookingScreenState extends ConsumerState<OpsiBookingScreen> {
             ),
             const SizedBox(height: 32),
 
-            Text('Pilih Jumlah Tamu (Pax)', style: textTheme.titleLarge),
+            Text('Pilih Jumlah Tamu', style: textTheme.titleLarge),
             const SizedBox(height: TSizes.spaceBtwItems),
             Wrap(
               spacing: 8.0,
               children: widget.package.pricingTiers.map((tier) {
                 final isSelected = _paxCount == tier.pax;
                 return ChoiceChip(
-                  label: Text('>= ${tier.pax} Pax'),
+                  label: Text('>= ${tier.pax} tamu'),
                   selected: isSelected,
                   onSelected: (selected) {
                     if (selected) _updateSelection(tier.pax);

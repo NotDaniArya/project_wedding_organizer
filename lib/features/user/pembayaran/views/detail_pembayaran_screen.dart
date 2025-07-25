@@ -98,7 +98,7 @@ class DetailPembayaranScreen extends StatelessWidget {
               ),
               _buildDetailRow(
                 'Booking Date',
-                '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} $eventTime', // Asumsi ada eventDate
+                '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} $eventTime', // Asumsi ada eventDate
               ),
               const SizedBox(height: 20),
               const Text('Transfer Pembayaran'),

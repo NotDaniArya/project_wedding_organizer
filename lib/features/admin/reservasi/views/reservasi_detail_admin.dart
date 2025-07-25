@@ -12,7 +12,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
 
   final String bookingId;
 
-  void _showApproveBookingDialog(
+  void _showFinalizeBookingDialog(
     BuildContext context,
     WidgetRef ref,
     Booking booking,
@@ -62,7 +62,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                           selectedTMDate == null
                               ? 'Pilih Tanggal & Waktu Technical Meeting'
                               : DateFormat(
-                                  'dd/MM/yy HH:mm',
+                                  'd-MMMM-yyyy HH:mm',
                                 ).format(selectedTMDate!),
                         ),
                         onPressed: () async {
@@ -106,7 +106,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                         selectedTMDate != null) {
                       ref
                           .read(reservasiViewModelProvider.notifier)
-                          .approveBooking(
+                          .finalize(
                             bookingId: booking.id,
                             totalCrew: int.parse(crewController.text),
                             technicalMeetingDate: selectedTMDate!,
@@ -114,7 +114,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                             onSuccess: () {
                               Navigator.pop(dialogContext);
                               MyHelperFunction.toastNotification(
-                                'Reservasi berhasil diterima.',
+                                'Berhasil Mengatur Jadwal Technical Meeting.',
                                 true,
                                 context,
                               );
@@ -153,7 +153,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
       appBar: AppBar(
         title: bookingDetailAsync.when(
           data: (booking) => Text(
-            '${DateFormat('dd MMMM yyyy', 'id_ID').format(booking.eventDate!)}, ${booking.eventTime ?? ''}',
+            '${DateFormat('dd-MMMM-yyyy', 'id_ID').format(booking.eventDate!)}, ${booking.eventTime ?? ''}',
           ),
           loading: () => const Text('Memuat...'),
           error: (err, stack) => const Text('Detail Reservasi'),
@@ -206,7 +206,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
           ),
           _buildDetailRow(
             'DATE :',
-            '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
+            '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
           _buildDetailRow('PAX :', '${booking.pax} PAX'),
           _buildDetailRow(
@@ -214,9 +214,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             booking.status.toUpperCase(),
             valueStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              color: booking.status == 'APPROVED' || booking.status == 'Lunas'
-                  ? Colors.green
-                  : Colors.orange,
+              color: booking.status == 'Lunas' ? Colors.green : Colors.orange,
             ),
           ),
           const SizedBox(height: 16),
@@ -229,7 +227,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             'TECHNICAL MEETING',
             booking.technicalMeetingDate != null
                 ? DateFormat(
-                    'dd/MM/yyyy HH:mm',
+                    'd-MMMM-yyyy HH:mm',
                   ).format(booking.technicalMeetingDate!)
                 : 'Akan diinfokan',
           ),
@@ -251,7 +249,21 @@ class ReservasiDetailAdmin extends ConsumerWidget {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              _showApproveBookingDialog(context, ref, booking);
+              ref
+                  .read(reservasiViewModelProvider.notifier)
+                  .approveBooking(
+                    bookingId: bookingId,
+                    onSuccess: () {
+                      MyHelperFunction.toastNotification(
+                        'Reservasi berhasil diterima.',
+                        true,
+                        context,
+                      );
+                    },
+                    onError: (error) {
+                      MyHelperFunction.toastNotification(error, false, context);
+                    },
+                  );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green.shade100,
@@ -261,6 +273,22 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             child: const Text('TERIMA RESERVASI'),
           ),
         ),
+        const SizedBox(height: 12),
+        if (booking.status == 'Sudah DP')
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                _showFinalizeBookingDialog(context, ref, booking);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade100,
+                foregroundColor: Colors.green.shade800,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('TERIMA RESERVASI'),
+            ),
+          ),
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,

@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:project_v/features/admin/dashboard/viewmodels/dashboard_viewmodel.dart';
-import 'package:project_v/features/admin/reservasi/views/reservasi_detail_admin.dart';
+import 'package:project_v/app/utils/constants/colors.dart';
+import 'package:project_v/features/user/pembayaran/viewmodels/pembayaran_viewmodel.dart';
+import 'package:project_v/features/user/reservasiku/views/detail_reservasiku_screen.dart';
 
-class ListReservasiUserScreen extends ConsumerWidget {
-  const ListReservasiUserScreen({super.key});
+class ListReservasikuScreen extends ConsumerWidget {
+  const ListReservasikuScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final reservasiListState = ref.watch(getAllUsersBookings);
+    final reservasiListState = ref.watch(pembayaranViewModelProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Reservasiku'),
+        backgroundColor: TColors.primaryColor,
+        foregroundColor: Colors.white,
+      ),
       body: reservasiListState.when(
         data: (booking) {
           return booking.isEmpty
               ? Center(
                   child: Text(
-                    'Kamu belum memiliki reservasi!',
+                    'Kamu belum memiliki notifikasi!',
                     textAlign: TextAlign.center,
                     style: textTheme.bodyLarge,
                   ),
@@ -42,8 +48,10 @@ class ListReservasiUserScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tanggal Acara: ${DateFormat('d-MMMM-yyyy', 'id_ID').format(bookingItem.eventDate!)}, Jam: ${bookingItem.eventTime} WITA',
+                              'Tanggal Acara: ${DateFormat('d MMMM yyyy', 'id_ID').format(bookingItem.eventDate!)}',
                             ),
+                            const SizedBox(height: 5),
+                            Text('Jam: ${bookingItem.eventTime} WITA'),
                             const SizedBox(height: 5),
                             Text(
                               bookingItem.status,
@@ -55,7 +63,7 @@ class ListReservasiUserScreen extends ConsumerWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ReservasiDetailAdmin(
+                              builder: (context) => DetailReservasikuScreen(
                                 bookingId: bookingItem.id,
                               ),
                             ),

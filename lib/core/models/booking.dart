@@ -1,4 +1,5 @@
 import 'package:project_v/core/models/packages.dart';
+import 'package:project_v/core/models/profile.dart';
 
 class Booking {
   Booking({
@@ -15,6 +16,7 @@ class Booking {
     this.totalCrew,
     required this.status,
     this.packages,
+    this.profiles,
   });
 
   final String id;
@@ -32,6 +34,7 @@ class Booking {
 
   // data hasil join table packages dan bookings
   final Packages? packages;
+  final Profile? profiles;
 
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
@@ -52,6 +55,9 @@ class Booking {
           : null,
       packages: json['packages'] != null
           ? Packages.fromJson(json['packages'])
+          : null,
+      profiles: json['profiles'] != null
+          ? Profile.fromJson(json['profiles'])
           : null,
       createdAt: DateTime.parse(json['created_at']),
       pax: json['pax'].toString(),

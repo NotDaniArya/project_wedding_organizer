@@ -48,8 +48,9 @@ class ListNotifikasiScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tanggal Acara: ${DateFormat('d MMMM yyyy', 'id_ID').format(bookingItem.eventDate!)}, Jam: ${bookingItem.eventTime} WITA',
+                              'Tanggal Acara: ${DateFormat('d-MMMM-yyyy', 'id_ID').format(bookingItem.eventDate!)}',
                             ),
+                            Text('Jam: ${bookingItem.eventTime} WITA'),
                             const SizedBox(height: 5),
                             Text(
                               bookingItem.status,

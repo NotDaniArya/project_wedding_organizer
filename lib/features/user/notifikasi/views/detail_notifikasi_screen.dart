@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/core/models/booking.dart'; // Import model
 
 import '../../booking/viewmodels/booking_viewmodels.dart';
@@ -19,7 +18,7 @@ class DetailNotifikasiScreen extends ConsumerWidget {
       appBar: AppBar(
         title: bookingDetailAsync.when(
           data: (booking) => Text(
-            '${DateFormat('dd MMMM yyyy', 'id_ID').format(booking.eventDate!)}, ${booking.eventTime ?? ''}',
+            '${DateFormat('dd-MMMM-yyyy', 'id_ID').format(booking.eventDate!)}, ${booking.eventTime ?? ''}',
           ),
           loading: () => const Text('Memuat...'),
           error: (err, stack) => const Text('Detail Reservasi'),
@@ -42,13 +41,7 @@ class DetailNotifikasiScreen extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
-      child: Column(
-        children: [
-          _buildDetailCard(context, booking),
-          const SizedBox(height: 24),
-          _buildActionButtons(context, ref, booking, isLoading),
-        ],
-      ),
+      child: Column(children: [_buildDetailCard(context, booking)]),
     );
   }
 
@@ -68,17 +61,18 @@ class DetailNotifikasiScreen extends ConsumerWidget {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const Divider(height: 24),
+          _buildDetailRow('Nama Pemesan', '${booking.profiles?.full_name}'),
           _buildDetailRow(
             'Fasilitas :',
             // PERBAIKAN: Akses fasilitas dengan aman
-            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} pax)',
+            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
-            '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
+            '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
           // PERBAIKAN: Gunakan pax dari model
-          _buildDetailRow('PAX :', '${booking.pax} PAX'),
+          _buildDetailRow('Jumlah Tamu :', '${booking.pax} tamu'),
           _buildDetailRow(
             'Status',
             booking.status.toUpperCase(),
@@ -99,7 +93,7 @@ class DetailNotifikasiScreen extends ConsumerWidget {
             'TECHNICAL MEETING',
             booking.technicalMeetingDate != null
                 ? DateFormat(
-                    'dd/MM/yyyy HH:mm',
+                    'd-MMMM-yyyy HH:mm',
                   ).format(booking.technicalMeetingDate!)
                 : 'Akan diinfokan',
           ),
@@ -107,105 +101,6 @@ class DetailNotifikasiScreen extends ConsumerWidget {
           _buildDetailRow('LOCATION', booking.location ?? 'Tidak ditentukan'),
         ],
       ),
-    );
-  }
-
-  // Widget untuk tombol-tombol aksi
-  Widget _buildActionButtons(
-    BuildContext context,
-    WidgetRef ref,
-    Booking booking,
-    bool isLoading,
-  ) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              MyHelperFunction.launchURL(
-                'https://wa.me/6281234567890',
-              ); // Ganti nomor WA
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green.shade100,
-              foregroundColor: Colors.green.shade800,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: const Text('CHAT ADMIN'),
-          ),
-        ),
-        const SizedBox(height: 12),
-        if (booking.status != 'Lunas')
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () {
-                      // BEST PRACTICE: Tampilkan dialog konfirmasi sebelum cancel
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: const Text('Konfirmasi Pembatalan'),
-                          content: const Text(
-                            'Apakah Anda yakin ingin membatalkan reservasi ini?',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(ctx).pop(),
-                              child: const Text('Tidak'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(ctx).pop(); // Tutup dialog dulu
-                                ref
-                                    .read(bookingViewModelProvider.notifier)
-                                    .cancelBooking(
-                                      bookingId: booking.id,
-                                      onSuccess: () {
-                                        Navigator.of(
-                                          context,
-                                        ).pop(); // Kembali ke halaman sebelumnya
-                                        MyHelperFunction.toastNotification(
-                                          'Reservasi berhasil dibatalkan.',
-                                          true,
-                                          context,
-                                        );
-                                      },
-                                      onError: (error) {
-                                        MyHelperFunction.toastNotification(
-                                          error,
-                                          false,
-                                          context,
-                                        );
-                                      },
-                                    );
-                              },
-                              child: const Text(
-                                'Ya, Batalkan',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade100,
-                foregroundColor: Colors.red.shade800,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('CANCEL RESERVATION'),
-            ),
-          ),
-      ],
     );
   }
 
