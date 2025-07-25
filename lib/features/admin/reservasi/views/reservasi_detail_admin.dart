@@ -178,8 +178,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
         children: [
           _buildDetailCard(context, booking),
           const SizedBox(height: 24),
-          if (booking.status == 'Menunggu Konfirmasi')
-            _buildActionButtons(context, ref, booking, isLoading),
+          _buildActionButtons(context, ref, booking, isLoading),
         ],
       ),
     );
@@ -214,7 +213,9 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             booking.status.toUpperCase(),
             valueStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              color: booking.status == 'Lunas' ? Colors.green : Colors.orange,
+              color: booking.status == 'Sudah DP'
+                  ? Colors.green
+                  : Colors.orange,
             ),
           ),
           const SizedBox(height: 16),
@@ -245,34 +246,39 @@ class ReservasiDetailAdmin extends ConsumerWidget {
   ) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              ref
-                  .read(reservasiViewModelProvider.notifier)
-                  .approveBooking(
-                    bookingId: bookingId,
-                    onSuccess: () {
-                      MyHelperFunction.toastNotification(
-                        'Reservasi berhasil diterima.',
-                        true,
-                        context,
-                      );
-                    },
-                    onError: (error) {
-                      MyHelperFunction.toastNotification(error, false, context);
-                    },
-                  );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green.shade100,
-              foregroundColor: Colors.green.shade800,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+        if (booking.status == 'Menunggu Konfirmasi')
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                ref
+                    .read(reservasiViewModelProvider.notifier)
+                    .approveBooking(
+                      bookingId: bookingId,
+                      onSuccess: () {
+                        MyHelperFunction.toastNotification(
+                          'Reservasi berhasil diterima.',
+                          true,
+                          context,
+                        );
+                      },
+                      onError: (error) {
+                        MyHelperFunction.toastNotification(
+                          error,
+                          false,
+                          context,
+                        );
+                      },
+                    );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade100,
+                foregroundColor: Colors.green.shade800,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('TERIMA RESERVASI'),
             ),
-            child: const Text('TERIMA RESERVASI'),
           ),
-        ),
         const SizedBox(height: 12),
         if (booking.status == 'Sudah DP')
           SizedBox(
@@ -286,75 +292,76 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                 foregroundColor: Colors.green.shade800,
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: const Text('TERIMA RESERVASI'),
+              child: const Text('TENTUKAN TECHNICAL MEETING'),
             ),
           ),
         const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: isLoading
-                ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('Konfirmasi Tolak Reservasi'),
-                        content: const Text(
-                          'Apakah Anda yakin ingin menolak reservasi ini?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('Tidak'),
+        if (booking.status != 'Sudah DP')
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Konfirmasi Tolak Reservasi'),
+                          content: const Text(
+                            'Apakah Anda yakin ingin menolak reservasi ini?',
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(ctx).pop();
-                              ref
-                                  .read(bookingViewModelProvider.notifier)
-                                  .cancelBooking(
-                                    bookingId: booking.id,
-                                    onSuccess: () {
-                                      Navigator.of(context).pop();
-                                      MyHelperFunction.toastNotification(
-                                        'Reservasi berhasil Ditolak.',
-                                        true,
-                                        context,
-                                      );
-                                    },
-                                    onError: (error) {
-                                      MyHelperFunction.toastNotification(
-                                        error,
-                                        false,
-                                        context,
-                                      );
-                                    },
-                                  );
-                            },
-                            child: const Text(
-                              'Ya, Batalkan',
-                              style: TextStyle(color: Colors.red),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(),
+                              child: const Text('Tidak'),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.shade100,
-              foregroundColor: Colors.red.shade800,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                                ref
+                                    .read(bookingViewModelProvider.notifier)
+                                    .cancelBooking(
+                                      bookingId: booking.id,
+                                      onSuccess: () {
+                                        Navigator.of(context).pop();
+                                        MyHelperFunction.toastNotification(
+                                          'Reservasi berhasil Ditolak.',
+                                          true,
+                                          context,
+                                        );
+                                      },
+                                      onError: (error) {
+                                        MyHelperFunction.toastNotification(
+                                          error,
+                                          false,
+                                          context,
+                                        );
+                                      },
+                                    );
+                              },
+                              child: const Text(
+                                'Ya, Batalkan',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade100,
+                foregroundColor: Colors.red.shade800,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('TOLAK RESERVASI'),
             ),
-            child: isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text('TOLAK RESERVASI'),
           ),
-        ),
       ],
     );
   }

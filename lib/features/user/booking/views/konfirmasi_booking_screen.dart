@@ -88,6 +88,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             // kartu detail paket
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: TColors.primaryColor.withAlpha(150),

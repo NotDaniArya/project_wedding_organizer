@@ -53,6 +53,7 @@ class BookingViewModel extends StateNotifier<bool> {
     try {
       await _ref.read(bookingServiceProvider).cancelBooking(bookingId);
       // Refresh daftar booking agar UI terupdate
+      _ref.refresh(bookingServiceProvider).getMyBookings();
       _ref.invalidate(pembayaranViewModelProvider);
       onSuccess();
     } catch (e) {

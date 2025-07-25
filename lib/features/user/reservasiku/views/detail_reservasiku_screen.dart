@@ -85,7 +85,7 @@ class DetailReservasikuScreen extends ConsumerWidget {
             booking.status.toUpperCase(),
             valueStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              color: booking.status == 'APPROVED' || booking.status == 'Lunas'
+              color: booking.status == 'Sudah DP'
                   ? Colors.green
                   : Colors.orange,
             ),

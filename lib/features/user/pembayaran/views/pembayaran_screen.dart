@@ -18,7 +18,7 @@ class PembayaranScreen extends ConsumerWidget {
           return booking.isEmpty
               ? Center(
                   child: Text(
-                    'Kamu belum memiliki reservasi!',
+                    'Kamu belum memiliki pembayaran!',
                     textAlign: TextAlign.center,
                     style: texTheme.bodyLarge,
                   ),

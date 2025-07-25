@@ -24,7 +24,7 @@ class ListReservasikuScreen extends ConsumerWidget {
           return booking.isEmpty
               ? Center(
                   child: Text(
-                    'Kamu belum memiliki notifikasi!',
+                    'Kamu belum memiliki reservasi!',
                     textAlign: TextAlign.center,
                     style: textTheme.bodyLarge,
                   ),
