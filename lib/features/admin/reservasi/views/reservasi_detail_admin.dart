@@ -199,15 +199,16 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const Divider(height: 24),
+          _buildDetailRow('Nama Pemesan', booking.profiles!.full_name),
           _buildDetailRow(
             'Fasilitas :',
-            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} pax)',
+            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
             '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
-          _buildDetailRow('PAX :', '${booking.pax} PAX'),
+          _buildDetailRow('Jumlah tamu :', '${booking.pax} tamu'),
           _buildDetailRow(
             'Status',
             booking.status.toUpperCase(),

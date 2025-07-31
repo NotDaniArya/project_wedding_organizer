@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../viewmodels/pembayaran_viewmodel.dart';
 import 'detail_pembayaran_screen.dart';
@@ -42,7 +43,7 @@ class PembayaranScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tanggal Acara: ${bookingItem.eventDate}, Jam: ${bookingItem.eventTime} WITA',
+                              'Tanggal Acara: ${DateFormat('d-MMMM-yyyy', 'id_ID').format(bookingItem.eventDate!)}, Jam: ${bookingItem.eventTime} WITA',
                             ),
                             const SizedBox(height: 5),
                             Text(bookingItem.status, style: texTheme.bodySmall),

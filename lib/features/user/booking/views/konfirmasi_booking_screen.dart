@@ -113,7 +113,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     style: textTheme.bodyMedium,
                   ),
                   Text(
-                    'Total Pax: >$paxCount pax',
+                    'Total Tamu: >$paxCount tamu',
                     style: textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 8),

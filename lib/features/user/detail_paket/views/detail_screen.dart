@@ -60,7 +60,7 @@ class DetailScreen extends ConsumerWidget {
                     children: [
                       // Harga
                       Text(
-                        'Daftar harga per-pax',
+                        'Daftar harga per-tamu',
                         style: textTheme.titleMedium?.copyWith(
                           color: Colors.grey.shade600,
                         ),
@@ -74,11 +74,11 @@ class DetailScreen extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '> ${tier.pax} Pax',
+                                '> ${tier.pax} tamu',
                                 style: textTheme.bodyLarge,
                               ),
                               Text(
-                                '${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(tier.price)} / pax',
+                                '${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(tier.price)} / tamu',
                                 style: textTheme.bodyLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),

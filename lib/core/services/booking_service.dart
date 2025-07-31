@@ -137,7 +137,9 @@ class BookingService {
   // fungsi untuk ambil semua booking user dan juga filter berdasarkan status
   Future<List<Booking>> getAllUsersBookings(Status? status) async {
     try {
-      var query = supabase.from('bookings').select('*, packages(*)');
+      var query = supabase
+          .from('bookings')
+          .select('*, packages(*), profiles(*)');
 
       if (status != null) {
         query = query.eq('status', status.value);
