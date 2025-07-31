@@ -43,6 +43,22 @@ class ReservasikuViewModel extends StateNotifier<bool> {
       state = false;
     }
   }
+
+  Future<void> cancelBooking({
+    required String bookingId,
+    required VoidCallback onSucces,
+    required Function(String) onError,
+  }) async {
+    state = true;
+    try {
+      await ref.read(reservasikuServiceProvider).cancelBooking(bookingId);
+      onSucces();
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      state = false;
+    }
+  }
 }
 
 final uploadReservasikuViewModelProvider =

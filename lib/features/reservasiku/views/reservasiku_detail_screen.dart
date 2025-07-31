@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:project_v/app/utils/constants/sizes.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/features/reservasiku/viewmodels/reservasiku_viewmodel.dart';
 
@@ -24,34 +25,6 @@ class ReservasikuDetailScreen extends ConsumerStatefulWidget {
 class _ReservasikuDetailScreenState
     extends ConsumerState<ReservasikuDetailScreen> {
   File? _pickedImageFile;
-
-  void _submitEditProfile() {
-    if (_pickedImageFile == null) {
-      return MyHelperFunction.toastNotification(
-        'Anda belum mengupload bukti pembayaran',
-        false,
-        context,
-      );
-      return;
-    }
-
-    ref
-        .read(uploadReservasikuViewModelProvider.notifier)
-        .uploadBookingProof(
-          bookingId: widget.bookingId,
-          proofFile: _pickedImageFile!,
-          onSuccess: () {
-            MyHelperFunction.toastNotification(
-              'Berhasil mengupload bukti bayar',
-              true,
-              context,
-            );
-            Navigator.pop(context);
-            ref.refresh(reservasikuServiceProvider);
-          },
-          onError: (error) => print(error),
-        );
-  }
 
   // Fungsi untuk memilih dan memotong gambar
   Future<void> _pickImage(ImageSource source) async {
@@ -86,6 +59,35 @@ class _ReservasikuDetailScreenState
     setState(() {
       _pickedImageFile = File(croppedFile.path);
     });
+  }
+
+  void _submitBuktiPembayaran() {
+    if (_pickedImageFile == null) {
+      return MyHelperFunction.toastNotification(
+        'Anda belum mengupload bukti pembayaran',
+        false,
+        context,
+      );
+      return;
+    }
+
+    ref
+        .read(uploadReservasikuViewModelProvider.notifier)
+        .uploadBookingProof(
+          bookingId: widget.bookingId,
+          proofFile: _pickedImageFile!,
+          onSuccess: () {
+            MyHelperFunction.toastNotification(
+              'Berhasil mengupload bukti bayar',
+              true,
+              context,
+            );
+            Navigator.pop(context);
+            ref.invalidate(reservasikuServiceProvider);
+            ref.invalidate(getDetailReservasikuProvider);
+          },
+          onError: (error) => print(error),
+        );
   }
 
   /// Widget helper untuk membuat card informasi yang seragam.
@@ -127,12 +129,12 @@ class _ReservasikuDetailScreenState
   /// Helper untuk mendapatkan warna berdasarkan status.
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'Lunas':
       case 'Selesai':
         return Colors.green.shade700;
       case 'Menunggu Pembayaran':
         return Colors.orange.shade700;
-      case 'Menunggu Verifikasi':
+      case 'Menunggu Konfirmasi':
+      case 'Menunggu Konfirmasi Pembayaran':
         return Colors.blue.shade700;
       case 'Dibatalkan':
         return Colors.red.shade700;
@@ -333,36 +335,139 @@ class _ReservasikuDetailScreenState
                         const SizedBox(height: 24),
 
                         // --- Tombol Aksi ---
-                        // --- Tombol Aksi ---
                         if (booking.status == 'Menunggu Pembayaran')
                           Center(
-                            child: ElevatedButton.icon(
-                              icon: isLoading
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2.0,
-                                      ),
-                                    )
-                                  : const Icon(Icons.cloud_upload_outlined),
-                              label: Text(
-                                isLoading
-                                    ? 'Mengupload...'
-                                    : 'Kirim Bukti Pembayaran',
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: TColors.primaryColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 32,
-                                  vertical: 12,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                icon: isLoading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2.0,
+                                        ),
+                                      )
+                                    : const Icon(Icons.cloud_upload_outlined),
+                                label: Text(
+                                  isLoading
+                                      ? 'Mengupload...'
+                                      : 'Kirim Bukti Pembayaran',
                                 ),
-                                textStyle: textTheme.titleMedium,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: TColors.primaryColor,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 32,
+                                    vertical: 12,
+                                  ),
+                                  textStyle: textTheme.titleMedium,
+                                ),
+                                // Nonaktifkan tombol saat sedang upload
+                                onPressed: isLoading
+                                    ? null
+                                    : _submitBuktiPembayaran,
                               ),
-                              // Nonaktifkan tombol saat sedang upload
-                              onPressed: isLoading ? null : _submitEditProfile,
+                            ),
+                          ),
+
+                        const SizedBox(height: TSizes.spaceBtwItems),
+
+                        // tombol batalkan reservasi
+                        if (booking.status == 'Menunggu Konfirmasi' ||
+                            booking.status == 'Menunggu Pembayaran')
+                          Center(
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () {
+                                        // BEST PRACTICE: Tampilkan dialog konfirmasi sebelum cancel
+                                        showDialog(
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                            title: const Text(
+                                              'Konfirmasi Pembatalan',
+                                            ),
+                                            content: const Text(
+                                              'Apakah Anda yakin ingin membatalkan reservasi ini?',
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(ctx).pop(),
+                                                child: const Text('Tidak'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                    ctx,
+                                                  ).pop(); // Tutup dialog dulu
+                                                  ref
+                                                      .read(
+                                                        uploadReservasikuViewModelProvider
+                                                            .notifier,
+                                                      )
+                                                      .cancelBooking(
+                                                        bookingId: booking.id,
+                                                        onSucces: () {
+                                                          Navigator.of(
+                                                            context,
+                                                          ).pop(); // Kembali ke halaman sebelumnya
+                                                          MyHelperFunction.toastNotification(
+                                                            'Reservasi berhasil dibatalkan.',
+                                                            true,
+                                                            context,
+                                                          );
+
+                                                          ref.invalidate(
+                                                            getMyReservasikuProvider,
+                                                          );
+
+                                                          ref.invalidate(
+                                                            getDetailReservasikuProvider,
+                                                          );
+                                                        },
+                                                        onError: (error) {
+                                                          MyHelperFunction.toastNotification(
+                                                            error,
+                                                            false,
+                                                            context,
+                                                          );
+                                                        },
+                                                      );
+                                                },
+                                                child: const Text(
+                                                  'Ya, Batalkan',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red.shade100,
+                                  foregroundColor: Colors.red.shade800,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 32,
+                                    vertical: 12,
+                                  ),
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : const Text('Batalkan Reservasi'),
+                              ),
                             ),
                           ),
                       ],

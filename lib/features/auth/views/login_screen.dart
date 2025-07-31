@@ -66,16 +66,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               Image.asset(
                 'assets/images/logo_aplikasi.png',
-                width: 100,
+                width: 150,
                 fit: BoxFit.cover,
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
-              Text(
-                'Ingin pernikahanmu lebih mudah?\nKami yang atur kamu terima beres',
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
               Form(
                 key: _form,
                 child: Column(

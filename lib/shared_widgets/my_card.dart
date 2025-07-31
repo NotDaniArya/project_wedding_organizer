@@ -32,7 +32,7 @@ class MyCard extends StatelessWidget {
     Color textColor;
 
     switch (reservasi.status) {
-      case 'Lunas':
+      case 'Selesai':
         backgroundColor = Colors.green.shade100;
         textColor = Colors.green.shade800;
         break;
@@ -40,13 +40,10 @@ class MyCard extends StatelessWidget {
         backgroundColor = Colors.orange.shade100;
         textColor = Colors.orange.shade800;
         break;
-      case 'Menunggu Verifikasi':
+      case 'Menunggu Konfirmasi':
+      case 'Menunggu Konfirmasi Pembayaran':
         backgroundColor = Colors.blue.shade100;
         textColor = Colors.blue.shade800;
-        break;
-      case 'Selesai':
-        backgroundColor = Colors.grey.shade300;
-        textColor = Colors.grey.shade800;
         break;
       default:
         backgroundColor = Colors.red.shade100;
@@ -59,7 +56,7 @@ class MyCard extends StatelessWidget {
         style: TextStyle(
           color: textColor,
           fontWeight: FontWeight.bold,
-          fontSize: 12,
+          fontSize: 10,
         ),
       ),
       backgroundColor: backgroundColor,

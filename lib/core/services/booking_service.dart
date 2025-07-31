@@ -57,6 +57,7 @@ class BookingService {
       final myBookings = res
           .map((bookings) => Booking.fromJson(bookings))
           .toList();
+
       return myBookings;
     } catch (e) {
       throw Exception('Gagal mengambil data reservasi: $e');
@@ -116,6 +117,18 @@ class BookingService {
       }
     } catch (e) {
       throw Exception('Gagal mengupload bukti pembayaran: $e');
+    }
+  }
+
+  // untuk membatalkan reservasi
+  Future<void> cancelBooking(String bookingId) async {
+    try {
+      await supabase
+          .from('bookings')
+          .update({'status': 'Dibatalkan'})
+          .eq('id', bookingId);
+    } catch (e) {
+      throw Exception('Gagal membatalkan reservasi: $e');
     }
   }
 }
