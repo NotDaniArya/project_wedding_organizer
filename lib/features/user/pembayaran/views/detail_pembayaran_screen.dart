@@ -82,7 +82,7 @@ class DetailPembayaranScreen extends StatelessWidget {
 
               // --- Judul ---
               const Text(
-                'PAYMENT TRANSACTIONS',
+                'TRANSAKSI PEMBAYARAN',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -97,7 +97,7 @@ class DetailPembayaranScreen extends StatelessWidget {
                 '${booking.packages?.name} (${booking.pax}pax)' ?? 'Paket',
               ),
               _buildDetailRow(
-                'Booking Date',
+                'Tanggal Pemesanan',
                 '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} $eventTime', // Asumsi ada eventDate
               ),
               const SizedBox(height: 20),
