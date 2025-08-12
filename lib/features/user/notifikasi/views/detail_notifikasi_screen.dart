@@ -73,6 +73,9 @@ class DetailNotifikasiScreen extends ConsumerWidget {
           ),
           // PERBAIKAN: Gunakan pax dari model
           _buildDetailRow('Jumlah Tamu :', '${booking.pax} tamu'),
+          booking.note.isEmpty
+              ? _buildDetailRow('Catatan: ', '-')
+              : _buildDetailRow('Catatan :', booking.note),
           _buildDetailRow(
             'Status',
             booking.status.toUpperCase(),

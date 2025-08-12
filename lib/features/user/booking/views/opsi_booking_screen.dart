@@ -18,6 +18,7 @@ class OpsiBookingScreen extends ConsumerStatefulWidget {
 }
 
 class _OpsiBookingScreenState extends ConsumerState<OpsiBookingScreen> {
+  final _insertedNote = TextEditingController();
   DateTime? _selectedDate;
   DateTime _focusedDay = DateTime.now();
   late int _paxCount;
@@ -139,6 +140,22 @@ class _OpsiBookingScreenState extends ConsumerState<OpsiBookingScreen> {
                 );
               }).toList(),
             ),
+            const SizedBox(height: TSizes.spaceBtwItems),
+            const Text('Catatan'),
+            TextFormField(
+              controller: _insertedNote,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 3,
+              decoration: InputDecoration(
+                hintText:
+                    'Contoh: Request dekorasi warna biru... (boleh kosong)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                isDense: true,
+              ),
+            ),
           ],
         ),
       ),
@@ -197,6 +214,7 @@ class _OpsiBookingScreenState extends ConsumerState<OpsiBookingScreen> {
                               selectedDate: _selectedDate!,
                               paxCount: _paxCount,
                               totalPrice: _calculatedPrice,
+                              note: _insertedNote.text,
                             ),
                           ),
                         );

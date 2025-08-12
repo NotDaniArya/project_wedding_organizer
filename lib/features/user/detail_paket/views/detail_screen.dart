@@ -74,7 +74,7 @@ class DetailScreen extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '> ${tier.pax} tamu',
+                                '-/+ ${tier.pax} tamu',
                                 style: textTheme.bodyLarge,
                               ),
                               Text(

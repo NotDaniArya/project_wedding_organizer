@@ -209,6 +209,9 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
           _buildDetailRow('Jumlah tamu :', '${booking.pax} tamu'),
+          booking.note.isEmpty
+              ? _buildDetailRow('Catatan: ', '-')
+              : _buildDetailRow('Catatan :', booking.note),
           _buildDetailRow(
             'Status',
             booking.status.toUpperCase(),

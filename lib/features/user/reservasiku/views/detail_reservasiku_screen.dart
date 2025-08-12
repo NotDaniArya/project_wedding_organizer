@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
-import 'package:project_v/core/models/booking.dart'; // Import model
+import 'package:project_v/core/models/booking.dart';
 
 import '../../booking/viewmodels/booking_viewmodels.dart';
 
@@ -29,14 +29,12 @@ class DetailReservasikuScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
         data: (booking) {
-          // Ekstrak konten utama ke dalam widget terpisah agar lebih bersih
           return _buildContent(context, ref, booking);
         },
       ),
     );
   }
 
-  // Widget konten utama yang bisa di-scroll
   Widget _buildContent(BuildContext context, WidgetRef ref, Booking booking) {
     final isLoading = ref.watch(bookingViewModelProvider);
 
@@ -52,7 +50,6 @@ class DetailReservasikuScreen extends ConsumerWidget {
     );
   }
 
-  // Widget untuk kartu detail
   Widget _buildDetailCard(BuildContext context, Booking booking) {
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -71,15 +68,16 @@ class DetailReservasikuScreen extends ConsumerWidget {
           _buildDetailRow('Nama Pemesan', '${booking.profiles?.full_name}'),
           _buildDetailRow(
             'Fasilitas :',
-            // PERBAIKAN: Akses fasilitas dengan aman
             '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
             '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
-          // PERBAIKAN: Gunakan pax dari model
           _buildDetailRow('Jumlah Tamu :', '${booking.pax} tamu'),
+          booking.note.isEmpty
+              ? _buildDetailRow('Catatan: ', '-')
+              : _buildDetailRow('Catatan :', booking.note),
           _buildDetailRow(
             'Status',
             booking.status.toUpperCase(),
@@ -104,14 +102,12 @@ class DetailReservasikuScreen extends ConsumerWidget {
                   ).format(booking.technicalMeetingDate!)
                 : 'Akan diinfokan',
           ),
-          // PERBAIKAN: Handle location yang bisa null
           _buildDetailRow('LOCATION', booking.location ?? 'Tidak ditentukan'),
         ],
       ),
     );
   }
 
-  // Widget untuk tombol-tombol aksi
   Widget _buildActionButtons(
     BuildContext context,
     WidgetRef ref,
@@ -125,9 +121,7 @@ class DetailReservasikuScreen extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                MyHelperFunction.launchURL(
-                  'https://wa.me/6281234567890',
-                ); // Ganti nomor WA
+                MyHelperFunction.launchURL('https://wa.me/6281234567890');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green.shade100,
@@ -148,9 +142,7 @@ class DetailReservasikuScreen extends ConsumerWidget {
                     .payBooking(
                       bookingId: bookingId,
                       onSuccess: () {
-                        Navigator.of(
-                          context,
-                        ).pop(); // Kembali ke halaman sebelumnya
+                        Navigator.of(context).pop();
                         MyHelperFunction.toastNotification(
                           'Berhasil membayar dp.',
                           true,
@@ -183,7 +175,6 @@ class DetailReservasikuScreen extends ConsumerWidget {
               onPressed: isLoading
                   ? null
                   : () {
-                      // BEST PRACTICE: Tampilkan dialog konfirmasi sebelum cancel
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
@@ -198,15 +189,13 @@ class DetailReservasikuScreen extends ConsumerWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(ctx).pop(); // Tutup dialog dulu
+                                Navigator.of(ctx).pop();
                                 ref
                                     .read(bookingViewModelProvider.notifier)
                                     .cancelBooking(
                                       bookingId: booking.id,
                                       onSuccess: () {
-                                        Navigator.of(
-                                          context,
-                                        ).pop(); // Kembali ke halaman sebelumnya
+                                        Navigator.of(context).pop();
                                         MyHelperFunction.toastNotification(
                                           'Reservasi berhasil dibatalkan.',
                                           true,
@@ -249,7 +238,6 @@ class DetailReservasikuScreen extends ConsumerWidget {
     );
   }
 
-  // Helper widget untuk membuat baris detail
   Widget _buildDetailRow(String title, String value, {TextStyle? valueStyle}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),

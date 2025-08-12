@@ -16,12 +16,14 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
     required this.selectedDate,
     required this.paxCount,
     required this.totalPrice,
+    required this.note,
   });
 
   final Packages package;
   final DateTime selectedDate;
   final int paxCount;
   final double totalPrice;
+  final String note;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,6 +39,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
             bookingDate: selectedDate,
             totalPrice: totalPrice,
             pax: paxCount.toString(),
+            note: note,
             onSuccess: () {
               showDialog(
                 context: context,
@@ -116,6 +119,9 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     'Total Tamu: >$paxCount tamu',
                     style: textTheme.bodyMedium,
                   ),
+                  note.isEmpty
+                      ? const Text('Catatan: -')
+                      : Text('Catatan: $note'),
                   const SizedBox(height: 8),
                   Text(
                     NumberFormat.currency(

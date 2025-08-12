@@ -28,6 +28,7 @@ class BookingService {
     required double totalPrice,
     required DateTime bookingDate,
     required String pax,
+    required String note,
   }) async {
     try {
       await supabase.from('bookings').insert({
@@ -36,6 +37,7 @@ class BookingService {
         'total_price': totalPrice,
         'event_date': bookingDate.toIso8601String(),
         'pax': int.parse(pax),
+        'note': note,
       });
 
       await supabase.from('unavailable_dates').insert({

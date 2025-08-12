@@ -33,8 +33,6 @@ class BerandaScreen extends ConsumerWidget {
         actions: [
           myReservationAsyncValue.when(
             data: (bookings) {
-              // --- PERBAIKAN LOGIKA NOTIFIKASI ---
-              // Cek apakah daftar booking tidak kosong. Ini cara yang aman.
               final bool hasBookings = bookings.isNotEmpty;
               return IconButton(
                 icon: Icon(
@@ -47,8 +45,7 @@ class BerandaScreen extends ConsumerWidget {
                 ),
                 onPressed: hasBookings
                     ? () {
-                        // Ambil ID dari booking pertama (terbaru)
-                        final latestBookingId = bookings.first.id;
+                  final latestBookingId = bookings.first.id;
                         Navigator.push(
                           context,
                           MaterialPageRoute(

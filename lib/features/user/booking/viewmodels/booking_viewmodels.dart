@@ -21,6 +21,7 @@ class BookingViewModel extends StateNotifier<bool> {
     required DateTime bookingDate,
     required double totalPrice,
     required String pax,
+    required String note,
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) async {
@@ -33,6 +34,7 @@ class BookingViewModel extends StateNotifier<bool> {
             totalPrice: totalPrice,
             bookingDate: bookingDate,
             pax: pax,
+            note: note,
           );
       onSuccess();
       _ref.refresh(bookingServiceProvider).getMyBookings();
