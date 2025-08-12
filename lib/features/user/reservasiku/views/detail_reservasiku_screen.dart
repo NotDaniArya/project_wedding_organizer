@@ -68,13 +68,13 @@ class DetailReservasikuScreen extends ConsumerWidget {
           _buildDetailRow('Nama Pemesan', '${booking.profiles?.full_name}'),
           _buildDetailRow(
             'Fasilitas :',
-            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
+            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (-/+ ${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
             '${DateFormat('dd/MM/yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
-          _buildDetailRow('Jumlah Tamu :', '${booking.pax} tamu'),
+          _buildDetailRow('Jumlah Tamu :', '-/+ ${booking.pax} tamu'),
           booking.note.isEmpty
               ? _buildDetailRow('Catatan: ', '-')
               : _buildDetailRow('Catatan :', booking.note),

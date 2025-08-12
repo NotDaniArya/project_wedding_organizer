@@ -202,13 +202,13 @@ class ReservasiDetailAdmin extends ConsumerWidget {
           _buildDetailRow('Nama Pemesan', booking.profiles!.full_name),
           _buildDetailRow(
             'Fasilitas :',
-            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
+            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (-/+ ${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
             '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
-          _buildDetailRow('Jumlah tamu :', '${booking.pax} tamu'),
+          _buildDetailRow('Jumlah tamu :', '-/+ ${booking.pax} tamu'),
           booking.note.isEmpty
               ? _buildDetailRow('Catatan: ', '-')
               : _buildDetailRow('Catatan :', booking.note),

@@ -65,14 +65,14 @@ class DetailNotifikasiScreen extends ConsumerWidget {
           _buildDetailRow(
             'Fasilitas :',
             // PERBAIKAN: Akses fasilitas dengan aman
-            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (${booking.pax} tamu)',
+            '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (-/+ ${booking.pax} tamu)',
           ),
           _buildDetailRow(
             'DATE :',
             '${DateFormat('d-MMMM-yyyy').format(booking.eventDate!)} ${booking.eventTime ?? ''}',
           ),
           // PERBAIKAN: Gunakan pax dari model
-          _buildDetailRow('Jumlah Tamu :', '${booking.pax} tamu'),
+          _buildDetailRow('Jumlah Tamu :', '-/+ ${booking.pax} tamu'),
           booking.note.isEmpty
               ? _buildDetailRow('Catatan: ', '-')
               : _buildDetailRow('Catatan :', booking.note),

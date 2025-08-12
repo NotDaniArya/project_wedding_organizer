@@ -116,7 +116,7 @@ class KonfirmasiBookingScreen extends ConsumerWidget {
                     style: textTheme.bodyMedium,
                   ),
                   Text(
-                    'Total Tamu: >$paxCount tamu',
+                    'Total Tamu: -/+ $paxCount tamu',
                     style: textTheme.bodyMedium,
                   ),
                   note.isEmpty

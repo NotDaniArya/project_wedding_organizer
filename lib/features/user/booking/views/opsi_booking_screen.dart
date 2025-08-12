@@ -128,7 +128,7 @@ class _OpsiBookingScreenState extends ConsumerState<OpsiBookingScreen> {
               children: widget.package.pricingTiers.map((tier) {
                 final isSelected = _paxCount == tier.pax;
                 return ChoiceChip(
-                  label: Text('>= ${tier.pax} tamu'),
+                  label: Text('-/+ ${tier.pax} tamu'),
                   selected: isSelected,
                   onSelected: (selected) {
                     if (selected) _updateSelection(tier.pax);
