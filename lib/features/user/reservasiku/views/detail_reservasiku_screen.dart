@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:project_v/app/utils/helper_function/my_helper_function.dart';
 import 'package:project_v/core/models/booking.dart';
@@ -10,6 +15,43 @@ class DetailReservasikuScreen extends ConsumerWidget {
   const DetailReservasikuScreen({super.key, required this.bookingId});
 
   final String bookingId;
+
+  // Fungsi untuk memilih, memotong, dan mengupload gambar
+  Future<void> _pickAndUploadProof(BuildContext context, WidgetRef ref) async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
+
+    if (pickedFile == null) return;
+
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedFile.path,
+      // Anda bisa menambahkan pengaturan UI Cropper di sini
+    );
+
+    if (croppedFile == null) return;
+
+    final file = File(croppedFile.path);
+
+    ref
+        .read(bookingViewModelProvider.notifier)
+        .uploadPaymentProof(
+          bookingId: bookingId,
+          proofFile: file,
+          onSuccess: () {
+            MyHelperFunction.toastNotification(
+              'Bukti DP berhasil diupload!',
+              true,
+              context,
+            );
+          },
+          onError: (error) {
+            MyHelperFunction.toastNotification(error, false, context);
+          },
+        );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,6 +85,9 @@ class DetailReservasikuScreen extends ConsumerWidget {
       child: Column(
         children: [
           _buildDetailCard(context, booking),
+          const SizedBox(height: 24),
+          if (booking.paymentProof != null && booking.paymentProof!.isNotEmpty)
+            _buildPaymentProofCard(context, booking),
           const SizedBox(height: 24),
           _buildActionButtons(context, ref, booking, isLoading),
         ],
@@ -108,6 +153,37 @@ class DetailReservasikuScreen extends ConsumerWidget {
     );
   }
 
+  Widget _buildPaymentProofCard(BuildContext context, Booking booking) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Bukti Pembayaran Anda',
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          width: double.infinity,
+          height: 250,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: CachedNetworkImage(
+            imageUrl: booking.paymentProof!,
+            fit: BoxFit.contain,
+            placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildActionButtons(
     BuildContext context,
     WidgetRef ref,
@@ -132,38 +208,26 @@ class DetailReservasikuScreen extends ConsumerWidget {
             ),
           ),
         const SizedBox(height: 12),
-        if (booking.status == 'Menunggu DP')
+        if (booking.status == 'Menunggu DP' &&
+            (booking.paymentProof == null || booking.paymentProof!.isEmpty))
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                ref
-                    .read(bookingViewModelProvider.notifier)
-                    .payBooking(
-                      bookingId: bookingId,
-                      onSuccess: () {
-                        Navigator.of(context).pop();
-                        MyHelperFunction.toastNotification(
-                          'Berhasil membayar dp.',
-                          true,
-                          context,
-                        );
-                      },
-                      onError: (error) {
-                        MyHelperFunction.toastNotification(
-                          error,
-                          false,
-                          context,
-                        );
-                      },
-                    );
-              },
+              onPressed: isLoading
+                  ? null
+                  : () => _pickAndUploadProof(context, ref),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue.shade100,
                 foregroundColor: Colors.blue.shade800,
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: const Text('DP SEKARANG'),
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('BAYAR DP SEKARANG'),
             ),
           ),
         const SizedBox(height: 12),

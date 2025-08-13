@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:project_v/core/models/booking.dart';
 import 'package:project_v/core/models/dashboard_stats.dart';
 import 'package:project_v/main.dart';
@@ -113,14 +115,43 @@ class BookingService {
     }
   }
 
-  Future<void> payBooking({required String bookingId}) async {
+  Future<void> uploadPaymentProof({
+    required String bookingId,
+    required File proofFile,
+  }) async {
     try {
+      // 1. Buat nama file yang unik
+      final fileExt = proofFile.path.split('.').last;
+      // Path file: user_id/booking_id.ext
+      final fileName =
+          '${user.id}/$bookingId-${DateTime.timestamp().microsecondsSinceEpoch}.$fileExt';
+
+      // 2. Upload file ke bucket 'payment_proofs'
+      await supabase.storage
+          .from('payment_proofs')
+          .upload(
+            fileName,
+            proofFile,
+            fileOptions: const FileOptions(
+              upsert: true,
+            ), // Timpa jika sudah ada
+          );
+
+      // 3. Dapatkan URL publik dari gambar yang baru diupload
+      final imageUrl = supabase.storage
+          .from('payment_proofs')
+          .getPublicUrl(fileName);
+
+      // 4. Perbarui baris di tabel 'bookings'
       await supabase
           .from('bookings')
-          .update({'status': Status.sudahDP.value})
+          .update({
+            'payment_proof': imageUrl, // Simpan URL di kolom yang benar
+            'status': Status.sudahDP.value, // Ubah status menjadi "Sudah DP"
+          })
           .eq('id', bookingId);
     } catch (e) {
-      print('Gagal dp booking: $e');
+      throw Exception('Gagal mengupload bukti DP: $e');
     }
   }
 

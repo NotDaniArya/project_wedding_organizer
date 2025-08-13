@@ -1,4 +1,5 @@
 // provider untuk BookingService
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,22 +66,31 @@ class BookingViewModel extends StateNotifier<bool> {
     }
   }
 
-  Future<void> payBooking({
+  // FUNGSI BARU: Untuk memanggil service upload bukti DP
+  Future<void> uploadPaymentProof({
     required String bookingId,
+    required File proofFile,
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) async {
-    state = true;
+    state = true; // Mulai loading
     try {
-      await _ref.read(bookingServiceProvider).payBooking(bookingId: bookingId);
-      // Refresh daftar booking agar UI terupdate
-      _ref.invalidate(pembayaranViewModelProvider);
-      _ref.refresh(bookingServiceProvider).getMyBookings();
+      await _ref
+          .read(bookingServiceProvider)
+          .uploadPaymentProof(bookingId: bookingId, proofFile: proofFile);
+
+      // Refresh data agar UI terupdate
+      _ref.invalidate(pembayaranViewModelProvider); // Refresh daftar booking
+      _ref.invalidate(
+        bookingDetailProvider(bookingId),
+      ); // Refresh detail booking ini
+      _ref.invalidate(bookingServiceProvider);
+
       onSuccess();
     } catch (e) {
       onError(e.toString());
     } finally {
-      state = false;
+      state = false; // Selesai loading
     }
   }
 }

@@ -11,6 +11,7 @@ class Booking {
     required this.packageId,
     required this.pax,
     required this.note,
+    this.paymentProof,
     required this.createdAt,
     this.location,
     required this.totalPrice,
@@ -31,6 +32,7 @@ class Booking {
   final String eventTime;
   final DateTime? eventDate;
   final DateTime createdAt;
+  final String? paymentProof;
   final String pax;
   final String note;
 
@@ -64,6 +66,7 @@ class Booking {
       createdAt: DateTime.parse(json['created_at']),
       pax: json['pax'].toString(),
       note: json['note'],
+      paymentProof: json['payment_proof'],
     );
   }
 }

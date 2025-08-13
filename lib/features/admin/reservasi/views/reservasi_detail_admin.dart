@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -112,7 +113,7 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                             technicalMeetingDate: selectedTMDate!,
                             location: locationController.text,
                             onSuccess: () {
-                              Navigator.pop(dialogContext);
+                              Navigator.of(dialogContext).pop();
                               MyHelperFunction.toastNotification(
                                 'Berhasil Mengatur Jadwal Technical Meeting.',
                                 true,
@@ -199,7 +200,10 @@ class ReservasiDetailAdmin extends ConsumerWidget {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const Divider(height: 24),
-          _buildDetailRow('Nama Pemesan', booking.profiles!.full_name),
+          _buildDetailRow(
+            'Nama Pemesan',
+            booking.profiles?.full_name ?? 'Data tidak ditemukan',
+          ),
           _buildDetailRow(
             'Fasilitas :',
             '${(booking.packages?.facilities.isNotEmpty ?? false) ? booking.packages!.facilities.first : ''} (-/+ ${booking.pax} tamu)',
@@ -237,6 +241,39 @@ class ReservasiDetailAdmin extends ConsumerWidget {
                 : 'Akan diinfokan',
           ),
           _buildDetailRow('LOCATION', booking.location ?? 'Tidak ditentukan'),
+          if (booking.status == 'Sudah DP' &&
+              booking.paymentProof != null &&
+              booking.paymentProof!.isNotEmpty)
+            const Divider(height: 24),
+          if (booking.status == 'Sudah DP' && booking.paymentProof != null)
+            const Text(
+              'BUKTI PEMBAYARAN DP',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black54,
+              ),
+            ),
+          const SizedBox(height: 8),
+          if (booking.status == 'Sudah DP' && booking.paymentProof != null)
+            Container(
+              width: double.infinity,
+              height: 250,
+              // Sesuaikan tinggi sesuai kebutuhan
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.black12,
+              ),
+              child: CachedNetworkImage(
+                imageUrl: booking.paymentProof!,
+                fit: BoxFit.contain,
+                // Gunakan contain agar gambar terlihat penuh
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    const Center(child: Text('Gagal memuat gambar')),
+              ),
+            ),
         ],
       ),
     );
